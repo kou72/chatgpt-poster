@@ -6,10 +6,11 @@ export const useChatGPT = () => {
   const [temperature, setTemperature] = useState(0.9);
   const [maxTokens, setMaxTokens] = useState(200);
   const [input, setInput] = useState("こんにちは");
-  const [output, setOutput] = useState("出力");
+  const [output, setOutput] = useState("");
 
   const requestChatGPT = async () => {
     try {
+      setOutput("リクエスト中...");
       const response = await fetch("/api/chatgpt", {
         method: "POST",
         headers: {
@@ -29,9 +30,11 @@ export const useChatGPT = () => {
         setOutput(data.choices[0].message.content);
       } else {
         console.error("Error calling API route");
+        setOutput("リクエストが失敗しました");
       }
     } catch (error) {
       console.log(error);
+      setOutput("リクエストが失敗しました");
     }
   };
 

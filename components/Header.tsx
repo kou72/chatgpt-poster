@@ -6,7 +6,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-full h-12 bg-gray-600 z-10">
+      <div className="fixed top-0 left-0 w-full h-12 bg-gray-800 z-10">
         <div className="flex items-center h-12">
           <span className="mx-1 text-white">API Key</span>
           <input
@@ -39,12 +39,6 @@ const Header = () => {
             onClick={handleChatgpt.requestChatGPT}
           >
             Send
-          </button>
-          <button
-            className="mx-2 px-2 bg-transparent border border-white rounded text-white"
-            onClick={() => handleChatgpt.setOutput("test")}
-          >
-            Test
           </button>
         </div>
       </div>
