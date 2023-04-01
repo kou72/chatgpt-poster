@@ -1,9 +1,7 @@
 import { useContext } from "react";
-import Head from "next/head";
-// import "github-markdown-css/github-markdown-light.css";
-import "github-markdown-css/github-markdown-dark.css";
-import ReactMarkdown from "react-markdown";
 import { ChatGPTContext } from "../hooks/useChatGPT";
+import Head from "next/head";
+import MarkdownPreview from "../components/MarkdownPreview";
 
 export default function Home() {
   const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
@@ -23,19 +21,52 @@ export default function Home() {
             ></textarea>
           </div>
           <div className="col-span-1 markdown-body">
-            <ReactMarkdown className="w-full h-[calc(100vh-5rem)] overflow-y-auto pr-2">
-              {chatgpt.output}
-            </ReactMarkdown>
+            <MarkdownPreview>
+              {/* {chatgpt.output} */}
+              {testtext}
+            </MarkdownPreview>
           </div>
         </div>
       </div>
-      <style jsx>
-        {`
-          .markdown-body {
-            background-color: initial;
-          }
-        `}
-      </style>
     </>
   );
 }
+
+const testtext = `
+# Chat-GPT Poster
+
+## これは何？
+
+OpenAIの[Chat-GPT](https://beta.openai.com/docs/api-reference/chat-completion)を使って、チャットボットを作るためのツールです。
+
+## 使い方
+
+### 1. モデルを選択する
+
+モデルを選択すると、そのモデルに対してリクエストを送ることができます。
+
+### 2. リクエストを送る
+
+リクエストを送ると、そのモデルが返す文章が表示されます。
+
+\`\`\`json
+{
+  "choices": [
+    {
+      "index": 0,
+      "text": "Hello, how are you?"
+    }
+  ]
+}
+\`\`\`
+
+## その他
+
+### モデルの選択肢
+
+- davinci
+- curie
+- babbage
+- ada
+
+`;
