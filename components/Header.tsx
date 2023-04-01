@@ -1,7 +1,8 @@
-import { useChatGPT } from "../hooks/useChatGPT";
+import { useContext } from "react";
+import { ChatGPTContext } from "../hooks/useChatGPT";
 
 const Header = () => {
-  const { chatgpt, handleChatgpt } = useChatGPT();
+  const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
 
   return (
     <>

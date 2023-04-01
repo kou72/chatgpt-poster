@@ -1,10 +1,11 @@
+import { useContext } from "react";
 import Head from "next/head";
 import "github-markdown-css/github-markdown-light.css";
 import ReactMarkdown from "react-markdown";
-import { useChatGPT } from "../hooks/useChatGPT";
+import { ChatGPTContext } from "../hooks/useChatGPT";
 
 export default function Home() {
-  const { chatgpt, handleChatgpt } = useChatGPT();
+  const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
 
   return (
     <>

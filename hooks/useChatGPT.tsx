@@ -1,9 +1,7 @@
-import { useState } from "react";
+import { useState, createContext } from "react";
 
 export const useChatGPT = () => {
-  const [apikey, setApikey] = useState(
-    "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"
-  );
+  const [apikey, setApikey] = useState("");
   const [model, setModel] = useState("gpt-3.5-turbo");
   const [temperature, setTemperature] = useState(0.9);
   const [maxTokens, setMaxTokens] = useState(200);
@@ -28,10 +26,7 @@ export const useChatGPT = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.choices[0].message.content);
-        alert(data.choices[0].message.content);
-        // setOutput(data.choices[0].message.content);
-        setOutput("test");
+        setOutput(data.choices[0].message.content);
       } else {
         console.error("Error calling API route");
       }
@@ -59,4 +54,35 @@ export const useChatGPT = () => {
       requestChatGPT,
     },
   };
+};
+
+export type ChatGPT = ReturnType<typeof useChatGPT>;
+
+export const ChatGPTContext = createContext<ChatGPT>({
+  chatgpt: {
+    apikey: "",
+    model: "",
+    temperature: 0,
+    maxTokens: 0,
+    input: "",
+    output: "",
+  },
+  handleChatgpt: {
+    setApikey: () => {},
+    setModel: () => {},
+    setTemperature: () => {},
+    setMaxTokens: () => {},
+    setInput: () => {},
+    setOutput: () => {},
+    requestChatGPT: () => Promise.resolve(),
+  },
+});
+
+export const ChatGPTProvider = ({ children }: { children: any }) => {
+  const chatGPT = useChatGPT();
+  return (
+    <ChatGPTContext.Provider value={chatGPT}>
+      {children}
+    </ChatGPTContext.Provider>
+  );
 };
