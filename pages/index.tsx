@@ -28,6 +28,18 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* <style jsx>
+        {`
+          .markdown-body {
+            background-color: initial;
+          }
+
+          .markdown-body pre {
+            padding: 0px;
+            overflow: unset;
+          }
+        `}
+      </style> */}
     </>
   );
 }

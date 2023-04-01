@@ -2,8 +2,6 @@
 // https://amirardalan.com/blog/syntax-highlight-code-in-markdown
 // https://zenn.dev/tminamiii/articles/f3cec628f70109
 
-// import "github-markdown-css/github-markdown-light.css";
-import "github-markdown-css/github-markdown-dark.css";
 import ReactMarkdown from "react-markdown";
 
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -22,10 +20,10 @@ SyntaxHighlighter.registerLanguage("markdown", markdown);
 SyntaxHighlighter.registerLanguage("json", json);
 
 import rangeParser from "parse-numeric-range";
-import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 export default function MarkdownPreview({ children }: { children: any }) {
-  const syntaxTheme = oneDark;
+  const syntaxTheme = vscDarkPlus;
   const MarkdownComponents: object = {
     code({ node, inline, className, ...props }: any) {
       const hasLang = /language-(\w+)/.exec(className || "");
@@ -78,18 +76,6 @@ export default function MarkdownPreview({ children }: { children: any }) {
           {children}
         </ReactMarkdown>
       </div>
-      <style jsx>
-        {`
-          .markdown-body {
-            background-color: initial;
-          }
-
-          .markdown-body pre {
-            padding: 0px;
-            overflow: unset;
-          }
-        `}
-      </style>
     </>
   );
 }
