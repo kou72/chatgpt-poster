@@ -6,10 +6,10 @@ export default function Layout({ children }: { children: any }) {
     <>
       <Header />
       <div className="flex min-h-screen">
-        <div className="w-1/12">
+        <div className="w-2/12">
           <Sidebar />
         </div>
-        <div className="w-11/12">
+        <div className="w-10/12">
           <main>{children}</main>
         </div>
       </div>

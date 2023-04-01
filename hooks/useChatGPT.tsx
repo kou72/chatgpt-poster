@@ -1,6 +1,7 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 
 const getStore = (key: string, initial: string | number) => {
+  if (typeof window === "undefined") return;
   try {
     const item = window.localStorage.getItem(key);
     return item ? JSON.parse(item) : initial;
@@ -17,6 +18,15 @@ export const useChatGPT = () => {
   const [maxTokens, setMaxTokens] = useState(getStore("maxTokens", 200));
   const [input, setInput] = useState("こんにちは");
   const [output, setOutput] = useState("");
+  const [totalTokens, setTotalTokens] = useState(getStore("totalTokens", 0));
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("totalTokens", JSON.stringify(totalTokens));
+    } catch (error) {
+      console.log(error);
+    }
+  }, [totalTokens]);
 
   const requestChatGPT = async () => {
     try {
@@ -37,6 +47,9 @@ export const useChatGPT = () => {
 
       if (response.ok) {
         const data = await response.json();
+        setTotalTokens(
+          (prevTokens: any) => prevTokens + data.usage.total_tokens
+        );
         setOutput(data.choices[0].message.content);
       } else {
         console.error("Error calling API route");
@@ -84,6 +97,25 @@ export const useChatGPT = () => {
     }
   };
 
+  // const saveTotalTokens = () => {
+  //   try {
+  //     console.log(totalTokens);
+  //     // setTotalTokens(value);
+  //     window.localStorage.setItem("totalTokens", JSON.stringify(totalTokens));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const resetTotalTokens = () => {
+    try {
+      setTotalTokens(0);
+      window.localStorage.setItem("totalTokens", JSON.stringify(0));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     chatgpt: {
       apikey,
@@ -92,12 +124,15 @@ export const useChatGPT = () => {
       maxTokens,
       input,
       output,
+      totalTokens,
     },
     handleChatgpt: {
       saveApikey,
       saveModel,
       saveTemperature,
       saveMaxTokens,
+      // saveTotalTokens,
+      resetTotalTokens,
       setInput,
       setOutput,
       requestChatGPT,
@@ -115,12 +150,15 @@ export const ChatGPTContext = createContext<ChatGPT>({
     maxTokens: 0,
     input: "",
     output: "",
+    totalTokens: 0,
   },
   handleChatgpt: {
     saveApikey: () => {},
     saveModel: () => {},
     saveTemperature: () => {},
     saveMaxTokens: () => {},
+    // saveTotalTokens: () => {},
+    resetTotalTokens: () => {},
     setInput: () => {},
     setOutput: () => {},
     requestChatGPT: () => Promise.resolve(),

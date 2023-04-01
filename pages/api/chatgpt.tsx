@@ -37,7 +37,7 @@ export default async function handler(
       res.status(200).json(completion.data);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Error calling OpenAI API" });
+      res.status(500).json({ error: "Internal Server Error" });
     }
   } else {
     res.status(405).json({ error: "Method not allowed" });
