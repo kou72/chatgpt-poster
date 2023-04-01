@@ -2,8 +2,8 @@ import { useContext, useEffect } from "react";
 import { ChatGPTContext } from "../hooks/useChatGPT";
 
 const Header = () => {
-  const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
   const models = ["gpt-3.5-turbo", "gpt-3.5-turbo-0301"];
+  const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.ctrlKey && e.key === "Enter") {
@@ -26,13 +26,13 @@ const Header = () => {
           <input
             className="w-1/8 pl-1"
             value={chatgpt.apikey}
-            onChange={(e) => handleChatgpt.setApikey(e.target.value)}
+            onChange={(e) => handleChatgpt.saveApikey(e.target.value)}
           ></input>
           <span className="mx-1 text-white">Model</span>
           <select
             className="w-1/8 pl-1"
             value={chatgpt.model}
-            onChange={(e) => handleChatgpt.setModel(e.target.value)}
+            onChange={(e) => handleChatgpt.saveModel(e.target.value)}
           >
             {models.map((model) => (
               <option key={model} value={model}>
@@ -50,7 +50,7 @@ const Header = () => {
             max="1"
             value={chatgpt.temperature}
             onChange={(e) =>
-              handleChatgpt.setTemperature(Number(e.target.value))
+              handleChatgpt.saveTemperature(Number(e.target.value))
             }
           ></input>
           <span className="mx-1 text-white">Max Tokens</span>
@@ -59,7 +59,9 @@ const Header = () => {
             type="number"
             step="100"
             value={chatgpt.maxTokens}
-            onChange={(e) => handleChatgpt.setMaxTokens(Number(e.target.value))}
+            onChange={(e) =>
+              handleChatgpt.saveMaxTokens(Number(e.target.value))
+            }
           ></input>
           <button
             className="ml-auto mr-2 px-2 bg-transparent border border-white rounded text-white"

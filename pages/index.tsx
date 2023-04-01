@@ -21,64 +21,10 @@ export default function Home() {
             ></textarea>
           </div>
           <div className="col-span-1 markdown-body">
-            <MarkdownPreview>
-              {/* {chatgpt.output} */}
-              {testtext}
-            </MarkdownPreview>
+            <MarkdownPreview>{chatgpt.output}</MarkdownPreview>
           </div>
         </div>
       </div>
-      {/* <style jsx>
-        {`
-          .markdown-body {
-            background-color: initial;
-          }
-
-          .markdown-body pre {
-            padding: 0px;
-            overflow: unset;
-          }
-        `}
-      </style> */}
     </>
   );
 }
-
-const testtext = `
-# Chat-GPT Poster
-
-## これは何？
-
-OpenAIの[Chat-GPT](https://beta.openai.com/docs/api-reference/chat-completion)を使って、チャットボットを作るためのツールです。
-
-## 使い方
-
-### 1. モデルを選択する
-
-モデルを選択すると、そのモデルに対してリクエストを送ることができます。
-
-### 2. リクエストを送る
-
-リクエストを送ると、そのモデルが返す文章が表示されます。
-
-\`\`\`json
-{
-  "choices": [
-    {
-      "index": 0,
-      "text": "Hello, how are you?"
-    }
-  ]
-}
-\`\`\`
-
-## その他
-
-### モデルの選択肢
-
-- davinci
-- curie
-- babbage
-- ada
-
-`;

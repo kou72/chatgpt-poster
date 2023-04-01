@@ -1,10 +1,20 @@
 import { useState, createContext } from "react";
 
+const getStore = (key: string, initial: string | number) => {
+  try {
+    const item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : initial;
+  } catch (error) {
+    console.log(error);
+    return initial;
+  }
+};
+
 export const useChatGPT = () => {
-  const [apikey, setApikey] = useState("");
-  const [model, setModel] = useState("gpt-3.5-turbo");
-  const [temperature, setTemperature] = useState(0.9);
-  const [maxTokens, setMaxTokens] = useState(200);
+  const [apikey, setApikey] = useState(getStore("apikey", ""));
+  const [model, setModel] = useState(getStore("model", "gpt-3.5-turbo"));
+  const [temperature, setTemperature] = useState(getStore("temperature", 0.9));
+  const [maxTokens, setMaxTokens] = useState(getStore("maxTokens", 200));
   const [input, setInput] = useState("こんにちは");
   const [output, setOutput] = useState("");
 
@@ -38,6 +48,42 @@ export const useChatGPT = () => {
     }
   };
 
+  const saveApikey = (value: string) => {
+    try {
+      setApikey(value);
+      window.localStorage.setItem("apikey", JSON.stringify(value));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveModel = (value: string) => {
+    try {
+      setModel(value);
+      window.localStorage.setItem("model", JSON.stringify(value));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveTemperature = (value: number) => {
+    try {
+      setTemperature(value);
+      window.localStorage.setItem("temperature", JSON.stringify(value));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveMaxTokens = (value: number) => {
+    try {
+      setMaxTokens(value);
+      window.localStorage.setItem("maxTokens", JSON.stringify(value));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     chatgpt: {
       apikey,
@@ -48,10 +94,10 @@ export const useChatGPT = () => {
       output,
     },
     handleChatgpt: {
-      setApikey,
-      setModel,
-      setTemperature,
-      setMaxTokens,
+      saveApikey,
+      saveModel,
+      saveTemperature,
+      saveMaxTokens,
       setInput,
       setOutput,
       requestChatGPT,
@@ -71,10 +117,10 @@ export const ChatGPTContext = createContext<ChatGPT>({
     output: "",
   },
   handleChatgpt: {
-    setApikey: () => {},
-    setModel: () => {},
-    setTemperature: () => {},
-    setMaxTokens: () => {},
+    saveApikey: () => {},
+    saveModel: () => {},
+    saveTemperature: () => {},
+    saveMaxTokens: () => {},
     setInput: () => {},
     setOutput: () => {},
     requestChatGPT: () => Promise.resolve(),
