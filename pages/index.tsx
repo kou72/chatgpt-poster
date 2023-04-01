@@ -6,7 +6,7 @@ export default function Home() {
       <Head>
         <title>Chat-GPT Poster</title>
       </Head>
-      <div className="bg-gray-400 min-h-screen"></div>
+      <div className="bg-gray-400 min-h-screen pt-12"></div>
     </>
   );
 }

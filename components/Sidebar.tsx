@@ -2,7 +2,7 @@ import React from "react";
 
 const Sidebar = () => {
   return (
-    <div className="bg-gray-500 min-h-screen">
+    <div className="bg-gray-500 min-h-screen pt-12">
       <div className="flex">
         <ul className="border-r">
           <li className="py-2 border-b">メニュー1</li>
