@@ -1,24 +1,10 @@
-import { useState } from "react";
 import Head from "next/head";
 import "github-markdown-css/github-markdown-light.css";
 import ReactMarkdown from "react-markdown";
-
-const markdownString = `
-# title
-
-## title2
-
-- test
-- test
-- test
-`;
+import { useChatGPT } from "../hooks/useChatGPT";
 
 export default function Home() {
-  const [text, setText] = useState("");
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
-  };
+  const { chatgpt, handleChatgpt } = useChatGPT();
 
   return (
     <>
@@ -30,13 +16,13 @@ export default function Home() {
           <div className="col-span-1">
             <textarea
               className="bg-gray-300 w-full h-[calc(100vh-5rem)] overflow-y-auto p-1"
-              value={text}
-              onChange={handleChange}
+              value={chatgpt.input}
+              onChange={(e) => handleChatgpt.setInput(e.target.value)}
             ></textarea>
           </div>
           <div className="col-span-1 markdown-body">
             <ReactMarkdown className="w-full h-[calc(100vh-5rem)] overflow-y-auto">
-              {markdownString}
+              {chatgpt.output}
             </ReactMarkdown>
           </div>
         </div>
