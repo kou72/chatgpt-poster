@@ -1,32 +1,35 @@
 import { useState, createContext, useEffect } from "react";
 
-const getStore = (key: string, initial: string | number) => {
+const getStore = (key: string) => {
   if (typeof window === "undefined") return;
   try {
     const item = window.localStorage.getItem(key);
-    return item ? JSON.parse(item) : initial;
+    return JSON.parse(item ?? "");
   } catch (error) {
     console.log(error);
-    return initial;
   }
 };
 
 export const useChatGPT = () => {
-  const [apikey, setApikey] = useState(getStore("apikey", ""));
-  const [model, setModel] = useState(getStore("model", "gpt-3.5-turbo"));
-  const [temperature, setTemperature] = useState(getStore("temperature", 0.9));
-  const [maxTokens, setMaxTokens] = useState(getStore("maxTokens", 200));
+  const [apikey, setApikey] = useState("");
+  const [model, setModel] = useState("gpt-3.5-turbo");
+  const [temperature, setTemperature] = useState(0.9);
+  const [maxTokens, setMaxTokens] = useState(200);
   const [input, setInput] = useState("こんにちは");
   const [output, setOutput] = useState("");
-  const [totalTokens, setTotalTokens] = useState(getStore("totalTokens", 0));
+  const [totalTokens, setTotalTokens] = useState(0);
 
   useEffect(() => {
     try {
-      window.localStorage.setItem("totalTokens", JSON.stringify(totalTokens));
+      setApikey(getStore("apikey"));
+      setModel(getStore("model"));
+      setTemperature(getStore("temperature"));
+      setMaxTokens(getStore("maxTokens"));
+      setTotalTokens(getStore("totalTokens"));
     } catch (error) {
       console.log(error);
     }
-  }, [totalTokens]);
+  }, []);
 
   const requestChatGPT = async () => {
     try {
@@ -47,9 +50,7 @@ export const useChatGPT = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setTotalTokens(
-          (prevTokens: any) => prevTokens + data.usage.total_tokens
-        );
+        saveTotalTokens(data.usage.total_tokens);
         setOutput(data.choices[0].message.content);
       } else {
         console.error("Error calling API route");
@@ -82,6 +83,7 @@ export const useChatGPT = () => {
   const saveTemperature = (value: number) => {
     try {
       setTemperature(value);
+      setTotalTokens((prevTokens: any) => prevTokens + value);
       window.localStorage.setItem("temperature", JSON.stringify(value));
     } catch (error) {
       console.log(error);
@@ -97,15 +99,18 @@ export const useChatGPT = () => {
     }
   };
 
-  // const saveTotalTokens = () => {
-  //   try {
-  //     console.log(totalTokens);
-  //     // setTotalTokens(value);
-  //     window.localStorage.setItem("totalTokens", JSON.stringify(totalTokens));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const saveTotalTokens = (value: number) => {
+    try {
+      setTotalTokens((prevTokens: any) => prevTokens + value);
+      const data = window.localStorage.getItem("totalTokens");
+      window.localStorage.setItem(
+        "totalTokens",
+        JSON.stringify(Number(data) + value)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const resetTotalTokens = () => {
     try {
@@ -131,7 +136,6 @@ export const useChatGPT = () => {
       saveModel,
       saveTemperature,
       saveMaxTokens,
-      // saveTotalTokens,
       resetTotalTokens,
       setInput,
       setOutput,

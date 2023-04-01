@@ -10,6 +10,7 @@ const Sidebar = () => {
       <div className="border border-white rounded-md m-4 p-4">
         <p className="m-2 text-white">使った金額</p>
         <p className="m-2 text-white text-xl">{usedYen.toFixed(3)} 円</p>
+
         {/* <p>{chatgpt.totalTokens}</p> */}
         <button
           className="m-2 px-4 py-1 text-white bg-gray-500 rounded-md"
