@@ -1,8 +1,22 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ChatGPTContext } from "../hooks/useChatGPT";
 
 const Header = () => {
   const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
+  const models = ["gpt-3.5-turbo", "gpt-3.5-turbo-0301"];
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.key === "Enter") {
+      handleChatgpt.requestChatGPT();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <>
@@ -15,14 +29,25 @@ const Header = () => {
             onChange={(e) => handleChatgpt.setApikey(e.target.value)}
           ></input>
           <span className="mx-1 text-white">Model</span>
-          <input
-            className="w-1/12 pl-1"
+          <select
+            className="w-1/8 pl-1"
             value={chatgpt.model}
             onChange={(e) => handleChatgpt.setModel(e.target.value)}
-          ></input>
+          >
+            {models.map((model) => (
+              <option key={model} value={model}>
+                {model}
+              </option>
+            ))}
+          </select>
+
           <span className="mx-1 text-white">Temperature</span>
           <input
             className="w-1/12 pl-1"
+            type="number"
+            step="0.1"
+            min="0"
+            max="1"
             value={chatgpt.temperature}
             onChange={(e) =>
               handleChatgpt.setTemperature(Number(e.target.value))
@@ -31,11 +56,13 @@ const Header = () => {
           <span className="mx-1 text-white">Max Tokens</span>
           <input
             className="w-1/12 pl-1"
+            type="number"
+            step="100"
             value={chatgpt.maxTokens}
             onChange={(e) => handleChatgpt.setMaxTokens(Number(e.target.value))}
           ></input>
           <button
-            className="mx-2 px-2 bg-transparent border border-white rounded text-white"
+            className="ml-auto mr-2 px-2 bg-transparent border border-white rounded text-white"
             onClick={handleChatgpt.requestChatGPT}
           >
             Send

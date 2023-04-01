@@ -78,6 +78,18 @@ export default function MarkdownPreview({ children }: { children: any }) {
           {children}
         </ReactMarkdown>
       </div>
+      <style jsx>
+        {`
+          .markdown-body {
+            background-color: initial;
+          }
+
+          .markdown-body pre {
+            padding: 0px;
+            overflow: unset;
+          }
+        `}
+      </style>
     </>
   );
 }

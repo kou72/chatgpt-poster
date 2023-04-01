@@ -10,6 +10,12 @@ const Sidebar = () => {
           <li className="py-2 border-b">メニュー3</li>
         </ul>
       </div>
+      {/* <input list="frameworks" />
+      <datalist id="frameworks">
+        <option value="React" />
+        <option value="Vue" />
+        <option value="Angular" />
+      </datalist> */}
     </div>
   );
 };
