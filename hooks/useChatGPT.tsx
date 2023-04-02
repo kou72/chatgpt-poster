@@ -31,18 +31,18 @@ export const useChatGPT = () => {
     []
   );
 
-  useEffect(() => {
-    try {
-      setApikey(getStore("apikey"));
-      setModel(getStore("model"));
-      setTemperature(getStore("temperature"));
-      setMaxTokens(getStore("maxTokens"));
-      setTotalTokens(getStore("totalTokens"));
-      setHistory(getStore("history"));
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //     setApikey(getStore("apikey"));
+  //     setModel(getStore("model"));
+  //     setTemperature(getStore("temperature"));
+  //     setMaxTokens(getStore("maxTokens"));
+  //     setTotalTokens(getStore("totalTokens"));
+  //     setHistory(getStore("history"));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
 
   const requestChatGPT = async () => {
     try {
