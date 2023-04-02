@@ -1,14 +1,21 @@
 import { useState, createContext, useEffect } from "react";
 
-const getStore = (key: string) => {
+const getStore = (key: string, init: any) => {
   if (typeof window === "undefined") return;
   try {
     const item = window.localStorage.getItem(key);
-    return JSON.parse(item ?? "");
+    return item ? JSON.parse(item) : init;
   } catch (error) {
     console.log(error);
   }
 };
+
+const initHistory = [
+  {
+    input: "History",
+    output: "最新30個までヒストリが表示されます",
+  },
+];
 
 const saveData = (key: string, newArr: any) => {
   if (typeof window === "undefined") return;
@@ -21,10 +28,10 @@ const saveData = (key: string, newArr: any) => {
 
 export const useChatGPT = () => {
   const [apikey, setApikey] = useState("");
-  const [model, setModel] = useState("gpt-3.5-turbo");
-  const [temperature, setTemperature] = useState(0.9);
-  const [maxTokens, setMaxTokens] = useState(200);
-  const [input, setInput] = useState("こんにちは");
+  const [model, setModel] = useState("");
+  const [temperature, setTemperature] = useState(0);
+  const [maxTokens, setMaxTokens] = useState(0);
+  const [input, setInput] = useState("こんにちは！");
   const [output, setOutput] = useState("");
   const [totalTokens, setTotalTokens] = useState(0);
   const [history, setHistory] = useState<{ input: string; output: string }[]>(
@@ -33,12 +40,12 @@ export const useChatGPT = () => {
 
   useEffect(() => {
     try {
-      setApikey(getStore("apikey"));
-      setModel(getStore("model"));
-      setTemperature(getStore("temperature"));
-      setMaxTokens(getStore("maxTokens"));
-      setTotalTokens(getStore("totalTokens"));
-      // setHistory(getStore("history"));
+      setApikey(getStore("apikey", ""));
+      setModel(getStore("model", "gpt-3.5-turbo"));
+      setTemperature(getStore("temperature", 0.9));
+      setMaxTokens(getStore("maxTokens", 200));
+      setTotalTokens(getStore("totalTokens", 0));
+      setHistory(getStore("history", initHistory));
     } catch (error) {
       console.log(error);
     }
