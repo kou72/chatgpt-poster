@@ -1,4 +1,5 @@
 import { useState, createContext, useEffect } from "react";
+import axios from "axios";
 
 const getStore = (key: string, init: any) => {
   if (typeof window === "undefined") return;
@@ -52,31 +53,27 @@ export const useChatGPT = () => {
   }, []);
 
   const requestChatGPT = async () => {
+    const URL = "https://api.openai.com/v1/chat/completions";
+    setOutput("リクエスト中...");
     try {
-      setOutput("リクエスト中...");
-      const response = await fetch("/api/chatgpt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        URL,
+        {
+          model: model,
+          messages: [{ role: "user", content: input }],
+          temperature: temperature,
+          max_tokens: maxTokens,
         },
-        body: JSON.stringify({
-          apikey,
-          model,
-          temperature,
-          maxTokens,
-          input,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        saveTotalTokens(data.usage.total_tokens);
-        setOutput(data.choices[0].message.content);
-        saveHistory(data.choices[0].message.content);
-      } else {
-        console.error("Error calling API route");
-        setOutput("リクエストが失敗しました");
-      }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apikey}`,
+          },
+        }
+      );
+      saveTotalTokens(response.data.usage.total_tokens);
+      setOutput(response.data.choices[0].message.content);
+      saveHistory(response.data.choices[0].message.content);
     } catch (error) {
       console.log(error);
       setOutput("リクエストが失敗しました");
