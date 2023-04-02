@@ -28,13 +28,4 @@ ul ul ul ul {
   padding: 0;
 }
 
-/* .markdown-body {
-  background-color: initial;
-}
-
-.markdown-body pre {
-  padding: 0px;
-  overflow: unset;
-} */
-
 @tailwind utilities;

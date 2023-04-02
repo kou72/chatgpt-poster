@@ -68,7 +68,7 @@ export default function MarkdownPreview({ children }: { children: any }) {
 
   return (
     <>
-      <div className="markdown-body">
+      <div>
         <ReactMarkdown
           className="w-full h-[calc(100vh-5rem)] overflow-y-auto pr-2"
           components={MarkdownComponents}

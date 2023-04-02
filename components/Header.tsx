@@ -58,6 +58,8 @@ const Header = () => {
             className="w-1/12 pl-1"
             type="number"
             step="100"
+            min="100"
+            max="3000"
             value={chatgpt.maxTokens}
             onChange={(e) =>
               handleChatgpt.saveMaxTokens(Number(e.target.value))
