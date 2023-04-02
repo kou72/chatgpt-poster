@@ -5,19 +5,18 @@ const Header = () => {
   const models = ["gpt-3.5-turbo", "gpt-3.5-turbo-0301"];
   const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
 
-  // const handleKeyDown = (e: KeyboardEvent) => {
-  //   if (e.ctrlKey && e.key === "Enter") {
-  //     handleChatgpt.requestChatGPT();
-  //   }
-  // };
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.key === "Enter") {
+      handleChatgpt.requestChatGPT();
+    }
+  };
 
-  // useEffect(() => {
-  //   window.addEventListener("keydown", handleKeyDown);
-  //   return () => {
-  //     window.removeEventListener("keydown", handleKeyDown);
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <>

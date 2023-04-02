@@ -95,6 +95,7 @@ export const useChatGPT = () => {
   };
 
   const saveTemperature = (value: number) => {
+    if (typeof window === "undefined") return;
     try {
       setTemperature(value);
       setTotalTokens((prevTokens: any) => prevTokens + value);
@@ -105,6 +106,7 @@ export const useChatGPT = () => {
   };
 
   const saveMaxTokens = (value: number) => {
+    if (typeof window === "undefined") return;
     try {
       setMaxTokens(value);
       window.localStorage.setItem("maxTokens", JSON.stringify(value));
