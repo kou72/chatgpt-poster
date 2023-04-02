@@ -10,6 +10,15 @@ const getStore = (key: string) => {
   }
 };
 
+const saveData = (key: string, newArr: any) => {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(key, JSON.stringify(newArr));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const useChatGPT = () => {
   const [apikey, setApikey] = useState("");
   const [model, setModel] = useState("gpt-3.5-turbo");
@@ -18,6 +27,9 @@ export const useChatGPT = () => {
   const [input, setInput] = useState("こんにちは");
   const [output, setOutput] = useState("");
   const [totalTokens, setTotalTokens] = useState(0);
+  const [history, setHistory] = useState<{ input: string; output: string }[]>(
+    []
+  );
 
   useEffect(() => {
     try {
@@ -26,6 +38,7 @@ export const useChatGPT = () => {
       setTemperature(getStore("temperature"));
       setMaxTokens(getStore("maxTokens"));
       setTotalTokens(getStore("totalTokens"));
+      setHistory(getStore("history"));
     } catch (error) {
       console.log(error);
     }
@@ -52,6 +65,7 @@ export const useChatGPT = () => {
         const data = await response.json();
         saveTotalTokens(data.usage.total_tokens);
         setOutput(data.choices[0].message.content);
+        saveHistory(data.choices[0].message.content);
       } else {
         console.error("Error calling API route");
         setOutput("リクエストが失敗しました");
@@ -121,6 +135,12 @@ export const useChatGPT = () => {
     }
   };
 
+  const saveHistory = (value: any) => {
+    const newArr = [...history, { input: input, output: value }].splice(-30);
+    saveData("history", newArr);
+    setHistory(newArr);
+  };
+
   return {
     chatgpt: {
       apikey,
@@ -130,6 +150,7 @@ export const useChatGPT = () => {
       input,
       output,
       totalTokens,
+      history,
     },
     handleChatgpt: {
       saveApikey,
@@ -140,6 +161,7 @@ export const useChatGPT = () => {
       setInput,
       setOutput,
       requestChatGPT,
+      saveHistory,
     },
   };
 };
@@ -155,17 +177,18 @@ export const ChatGPTContext = createContext<ChatGPT>({
     input: "",
     output: "",
     totalTokens: 0,
+    history: [],
   },
   handleChatgpt: {
     saveApikey: () => {},
     saveModel: () => {},
     saveTemperature: () => {},
     saveMaxTokens: () => {},
-    // saveTotalTokens: () => {},
     resetTotalTokens: () => {},
     setInput: () => {},
     setOutput: () => {},
     requestChatGPT: () => Promise.resolve(),
+    saveHistory: () => {},
   },
 });
 
