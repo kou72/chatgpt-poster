@@ -33,11 +33,11 @@ export const useChatGPT = () => {
 
   useEffect(() => {
     try {
-      // setApikey(getStore("apikey"));
+      setApikey(getStore("apikey"));
       setModel(getStore("model"));
-      // setTemperature(getStore("temperature"));
-      // setMaxTokens(getStore("maxTokens"));
-      // setTotalTokens(getStore("totalTokens"));
+      setTemperature(getStore("temperature"));
+      setMaxTokens(getStore("maxTokens"));
+      setTotalTokens(getStore("totalTokens"));
       // setHistory(getStore("history"));
     } catch (error) {
       console.log(error);
