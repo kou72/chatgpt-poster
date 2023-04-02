@@ -4,7 +4,7 @@ const getStore = (key: string) => {
   if (typeof window === "undefined") return;
   try {
     const item = window.localStorage.getItem(key);
-    if (item) return JSON.parse(item ?? "");
+    return JSON.parse(item ?? "");
   } catch (error) {
     console.log(error);
   }
@@ -38,7 +38,7 @@ export const useChatGPT = () => {
       setTemperature(getStore("temperature"));
       setMaxTokens(getStore("maxTokens"));
       setTotalTokens(getStore("totalTokens"));
-      setHistory(getStore("history"));
+      // setHistory(getStore("history"));
     } catch (error) {
       console.log(error);
     }
