@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { ChatGPTContext } from "../hooks/useChatGPT";
 import Head from "next/head";
 import MarkdownPreview from "../components/MarkdownPreview";
+import ReactMarkdown from "react-markdown";
 
 export default function Home() {
   const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
@@ -20,8 +21,9 @@ export default function Home() {
               onChange={(e) => handleChatgpt.setInput(e.target.value)}
             ></textarea>
           </div>
-          <div className="col-span-1 markdown-body">
-            <MarkdownPreview>{chatgpt.output}</MarkdownPreview>
+          <div className="col-span-1 markdown-body h-[calc(100vh-5rem)] overflow-y-auto">
+            {/* <MarkdownPreview>{chatgpt.output}</MarkdownPreview> */}
+            <ReactMarkdown>{chatgpt.output}</ReactMarkdown>
           </div>
         </div>
       </div>
