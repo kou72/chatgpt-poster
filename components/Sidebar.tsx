@@ -15,7 +15,7 @@ const Sidebar = () => {
     <div className="bg-gray-600 min-h-screen pt-12 text-center">
       <div className="border border-white rounded-md m-4 p-4">
         <p className="m-2 text-white">使った金額</p>
-        <p className="m-2 text-white text-xl">{usedYen.toFixed(3)} 円</p>
+        <p className="m-2 text-white text-xl">{usedYen.toFixed(3) ?? 0} 円</p>
         <button
           className="m-2 px-4 py-1 text-white bg-gray-500 rounded-md"
           onClick={handleChatgpt.resetTotalTokens}
