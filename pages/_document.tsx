@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import Script from "next/script";
 
 export default function Document() {
   return (
@@ -11,7 +12,7 @@ export default function Document() {
         ></script>
       </Head>
       <body>
-        <script src="https://adm.shinobi.jp/s/e53d8d64dbcb566bff8cc21525a343af"></script>
+        <Script src="https://adm.shinobi.jp/s/e53d8d64dbcb566bff8cc21525a343af"></Script>
         <Main />
         <NextScript />
       </body>
