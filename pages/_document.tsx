@@ -11,6 +11,7 @@ export default function Document() {
         ></script>
       </Head>
       <body>
+        <script src="https://adm.shinobi.jp/s/e53d8d64dbcb566bff8cc21525a343af"></script>
         <Main />
         <NextScript />
       </body>
