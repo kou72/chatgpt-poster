@@ -32,6 +32,7 @@ export const useChatGPT = () => {
   const [model, setModel] = useState("");
   const [temperature, setTemperature] = useState(0);
   const [maxTokens, setMaxTokens] = useState(0);
+  const [maxTokenCheck, setMaxTokenCheck] = useState(true);
   const [input, setInput] = useState("こんにちは！");
   const [output, setOutput] = useState("");
   const [totalTokens, setTotalTokens] = useState(0);
@@ -44,6 +45,7 @@ export const useChatGPT = () => {
       setTemperature(getStore("temperature", 0.9));
       setMaxTokens(getStore("maxTokens", 200));
       setTotalTokens(getStore("totalTokens", 0));
+      setMaxTokenCheck(getStore("totalTokenCheck", true));
       setHistory(getStore("history", initHistory));
     } catch (error) {
       console.log(error);
@@ -60,7 +62,7 @@ export const useChatGPT = () => {
           model: model,
           messages: [{ role: "user", content: input }],
           temperature: temperature,
-          max_tokens: maxTokens,
+          max_tokens: maxTokenCheck ? maxTokens : null,
         },
         {
           headers: {
@@ -117,6 +119,16 @@ export const useChatGPT = () => {
     }
   };
 
+  const toggleMaxTokenCheck = () => {
+    if (typeof window === "undefined") return;
+    try {
+      setMaxTokenCheck(!maxTokenCheck);
+      window.localStorage.setItem("totalTokenCheck", JSON.stringify(!maxTokenCheck));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const saveTotalTokens = (value: number) => {
     try {
       setTotalTokens((prevTokens: any) => prevTokens + value);
@@ -151,6 +163,7 @@ export const useChatGPT = () => {
       input,
       output,
       totalTokens,
+      maxTokenCheck,
       history,
     },
     handleChatgpt: {
@@ -158,6 +171,7 @@ export const useChatGPT = () => {
       saveModel,
       saveTemperature,
       saveMaxTokens,
+      toggleMaxTokenCheck,
       resetTotalTokens,
       setInput,
       setOutput,
@@ -175,6 +189,7 @@ export const ChatGPTContext = createContext<ChatGPT>({
     model: "",
     temperature: 0,
     maxTokens: 0,
+    maxTokenCheck: true,
     input: "",
     output: "",
     totalTokens: 0,
@@ -185,6 +200,7 @@ export const ChatGPTContext = createContext<ChatGPT>({
     saveModel: () => {},
     saveTemperature: () => {},
     saveMaxTokens: () => {},
+    toggleMaxTokenCheck: () => {},
     resetTotalTokens: () => {},
     setInput: () => {},
     setOutput: () => {},

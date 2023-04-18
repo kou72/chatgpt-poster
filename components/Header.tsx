@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ChatGPTContext } from "../hooks/useChatGPT";
 
 const Header = () => {
@@ -36,21 +36,27 @@ const Header = () => {
             min="0"
             max="1"
             value={chatgpt.temperature}
-            onChange={(e) =>
-              handleChatgpt.saveTemperature(Number(e.target.value))
-            }
+            onChange={(e) => handleChatgpt.saveTemperature(Number(e.target.value))}
           ></input>
+
+          <input
+            className="ml-2"
+            type="checkbox"
+            id="check"
+            checked={chatgpt.maxTokenCheck}
+            onChange={() => handleChatgpt.toggleMaxTokenCheck()}
+          />
+
           <span className="mx-1 text-white">Max Tokens</span>
           <input
             className="w-1/12 pl-1"
+            disabled={!chatgpt.maxTokenCheck}
             type="number"
             step="100"
             min="100"
             max="3000"
             value={chatgpt.maxTokens}
-            onChange={(e) =>
-              handleChatgpt.saveMaxTokens(Number(e.target.value))
-            }
+            onChange={(e) => handleChatgpt.saveMaxTokens(Number(e.target.value))}
           ></input>
           <button
             className="ml-auto mr-2 px-2 bg-transparent border border-white rounded text-white"
