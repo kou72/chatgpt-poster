@@ -1,18 +1,17 @@
-import { useContext } from "react";
-import { ChatGPTContext } from "../hooks/useChatGPT";
-import Head from "next/head";
+import { useChatGPT } from '../hooks/useChatGPT'
+import Head from 'next/head'
 // import MarkdownPreview from "../components/MarkdownPreview";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from 'react-markdown'
 
 export default function Home() {
-  const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
+  const { chatgpt, handleChatgpt } = useChatGPT()
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
-      console.log("key down cmd + Enter");
-      handleChatgpt.requestChatGPT();
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+      console.log('key down cmd + Enter')
+      handleChatgpt.requestChatGPT()
     }
-  };
+  }
 
   return (
     <>
@@ -36,5 +35,5 @@ export default function Home() {
         </div>
       </div>
     </>
-  );
+  )
 }
