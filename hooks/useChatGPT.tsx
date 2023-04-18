@@ -1,158 +1,139 @@
-import { useState, createContext, useEffect } from "react";
-import axios from "axios";
+import { useEffect } from 'react'
+import { atom, useRecoilState } from 'recoil'
+import axios from 'axios'
 
-const getStore = (key: string, init: any) => {
-  if (typeof window === "undefined") return;
+const getLocalStrage = (key: string, init: any) => {
+  if (typeof window === 'undefined') return
   try {
-    const item = window.localStorage.getItem(key);
-    return item ? JSON.parse(item) : init;
+    const item = window.localStorage.getItem(key)
+    return item ? JSON.parse(item) : init
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
+
+const setLocalStrage = (key: string, value: any) => {
+  if (typeof window === 'undefined') console.error('window undefined')
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value))
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 const initHistory = [
-  {
-    input: "History",
-    output: "最新30個までヒストリが表示されます",
-  },
-];
-
-const saveData = (key: string, newArr: any) => {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(key, JSON.stringify(newArr));
-  } catch (error) {
-    console.log(error);
-  }
-};
+  { input: 'History', output: '最新30個までヒストリが表示されます' },
+]
+export const apikeyState = atom({ key: 'apikey', default: '' })
+export const modelState = atom({ key: 'model', default: 'gpt-3.5-turbo' })
+export const temperatureState = atom({ key: 'temperature', default: 0.9 })
+export const maxTokensState = atom({ key: 'maxTokens', default: 200 })
+export const maxTokenCheckState = atom({ key: 'maxTokenCheck', default: true })
+export const inputState = atom({ key: 'input', default: 'こんにちは！' })
+export const outputState = atom({ key: 'output', default: '' })
+export const totalTokensState = atom({ key: 'totalTokens', default: 0 })
+export const historyState = atom({
+  key: 'historyState',
+  default: initHistory,
+})
 
 export const useChatGPT = () => {
-  const [apikey, setApikey] = useState("");
-  const [model, setModel] = useState("");
-  const [temperature, setTemperature] = useState(0);
-  const [maxTokens, setMaxTokens] = useState(0);
-  const [maxTokenCheck, setMaxTokenCheck] = useState(true);
-  const [input, setInput] = useState("こんにちは！");
-  const [output, setOutput] = useState("");
-  const [totalTokens, setTotalTokens] = useState(0);
-  const [history, setHistory] = useState<{ input: string; output: string }[]>([]);
+  const [apikey, setApikey] = useRecoilState(apikeyState)
+  const [model, setModel] = useRecoilState(modelState)
+  const [temperature, setTemperature] = useRecoilState(temperatureState)
+  const [maxTokens, setMaxTokens] = useRecoilState(maxTokensState)
+  const [maxTokenCheck, setMaxTokenCheck] = useRecoilState(maxTokenCheckState)
+  const [input, setInput] = useRecoilState(inputState)
+  const [output, setOutput] = useRecoilState(outputState)
+  const [totalTokens, setTotalTokens] = useRecoilState(totalTokensState)
+  const [history, setHistory] = useRecoilState(historyState)
 
   useEffect(() => {
     try {
-      setApikey(getStore("apikey", ""));
-      setModel(getStore("model", "gpt-3.5-turbo"));
-      setTemperature(getStore("temperature", 0.9));
-      setMaxTokens(getStore("maxTokens", 200));
-      setTotalTokens(getStore("totalTokens", 0));
-      setMaxTokenCheck(getStore("totalTokenCheck", true));
-      setHistory(getStore("history", initHistory));
+      setApikey(getLocalStrage('apikey', ''))
+      setModel(getLocalStrage('model', 'gpt-3.5-turbo'))
+      setTemperature(getLocalStrage('temperature', 0.9))
+      setMaxTokens(getLocalStrage('maxTokens', 200))
+      setTotalTokens(getLocalStrage('totalTokens', 0))
+      setMaxTokenCheck(getLocalStrage('totalTokenCheck', true))
+      setHistory(getLocalStrage('history', initHistory))
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  }, []);
+  }, [])
 
   const requestChatGPT = async () => {
-    const URL = "https://api.openai.com/v1/chat/completions";
-    setOutput("リクエスト中...");
+    const URL = 'https://api.openai.com/v1/chat/completions'
+    setOutput('リクエスト中...')
     try {
       const response = await axios.post(
         URL,
         {
           model: model,
-          messages: [{ role: "user", content: input }],
+          messages: [{ role: 'user', content: input }],
           temperature: temperature,
           max_tokens: maxTokenCheck ? maxTokens : null,
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${apikey}`,
           },
         }
-      );
-      saveTotalTokens(response.data.usage.total_tokens);
-      setOutput(response.data.choices[0].message.content);
-      saveHistory(response.data.choices[0].message.content);
+      )
+      saveTotalTokens(response.data.usage.total_tokens)
+      setOutput(response.data.choices[0].message.content)
+      saveHistory(response.data.choices[0].message.content)
     } catch (error: any) {
-      console.log(error.response.data.error.message);
-      setOutput("リクエストが失敗しました。\n\nerror: " + error.response.data.error.message);
+      console.log(error.response.data.error.message)
+      setOutput(
+        'リクエストが失敗しました。\n\nerror: ' +
+          error.response.data.error.message
+      )
     }
-  };
+  }
 
   const saveApikey = (value: string) => {
-    try {
-      setApikey(value);
-      window.localStorage.setItem("apikey", JSON.stringify(value));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    setApikey(value)
+    setLocalStrage('apikey', value)
+  }
 
   const saveModel = (value: string) => {
-    try {
-      setModel(value);
-      window.localStorage.setItem("model", JSON.stringify(value));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    setModel(value)
+    setLocalStrage('model', value)
+  }
 
   const saveTemperature = (value: number) => {
-    if (typeof window === "undefined") return;
-    try {
-      setTemperature(value);
-      setTotalTokens((prevTokens: any) => prevTokens + value);
-      window.localStorage.setItem("temperature", JSON.stringify(value));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    setTemperature(value)
+    setLocalStrage('temperature', value)
+  }
 
   const saveMaxTokens = (value: number) => {
-    if (typeof window === "undefined") return;
-    try {
-      setMaxTokens(value);
-      window.localStorage.setItem("maxTokens", JSON.stringify(value));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    setMaxTokens(value)
+    setLocalStrage('maxTokens', value)
+  }
 
   const toggleMaxTokenCheck = () => {
-    if (typeof window === "undefined") return;
-    try {
-      setMaxTokenCheck(!maxTokenCheck);
-      window.localStorage.setItem("totalTokenCheck", JSON.stringify(!maxTokenCheck));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    setMaxTokenCheck(!maxTokenCheck)
+    setLocalStrage('totalTokenCheck', !maxTokenCheck)
+  }
 
   const saveTotalTokens = (value: number) => {
-    try {
-      setTotalTokens((prevTokens: any) => prevTokens + value);
-      const data = window.localStorage.getItem("totalTokens");
-      window.localStorage.setItem("totalTokens", JSON.stringify(Number(data) + value));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    const sum = totalTokens + value
+    setTotalTokens(sum)
+    setLocalStrage('totalTokens', sum)
+  }
 
   const resetTotalTokens = () => {
-    try {
-      setTotalTokens(0);
-      window.localStorage.setItem("totalTokens", JSON.stringify(0));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    setTotalTokens(0)
+    setLocalStrage('totalTokens', 0)
+  }
 
   const saveHistory = (value: any) => {
-    const newArr = [...history, { input: input, output: value }].splice(-30);
-    saveData("history", newArr);
-    setHistory(newArr);
-  };
+    const newArr = [...history, { input: input, output: value }].splice(-30)
+    setHistory(newArr)
+    setLocalStrage('history', newArr)
+  }
 
   return {
     chatgpt: {
@@ -178,38 +159,5 @@ export const useChatGPT = () => {
       requestChatGPT,
       saveHistory,
     },
-  };
-};
-
-export type ChatGPT = ReturnType<typeof useChatGPT>;
-
-export const ChatGPTContext = createContext<ChatGPT>({
-  chatgpt: {
-    apikey: "",
-    model: "",
-    temperature: 0,
-    maxTokens: 0,
-    maxTokenCheck: true,
-    input: "",
-    output: "",
-    totalTokens: 0,
-    history: [],
-  },
-  handleChatgpt: {
-    saveApikey: () => {},
-    saveModel: () => {},
-    saveTemperature: () => {},
-    saveMaxTokens: () => {},
-    toggleMaxTokenCheck: () => {},
-    resetTotalTokens: () => {},
-    setInput: () => {},
-    setOutput: () => {},
-    requestChatGPT: () => Promise.resolve(),
-    saveHistory: () => {},
-  },
-});
-
-export const ChatGPTProvider = ({ children }: { children: any }) => {
-  const chatGPT = useChatGPT();
-  return <ChatGPTContext.Provider value={chatGPT}>{children}</ChatGPTContext.Provider>;
-};
+  }
+}
