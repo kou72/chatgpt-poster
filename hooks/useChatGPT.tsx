@@ -35,9 +35,7 @@ export const useChatGPT = () => {
   const [input, setInput] = useState("こんにちは！");
   const [output, setOutput] = useState("");
   const [totalTokens, setTotalTokens] = useState(0);
-  const [history, setHistory] = useState<{ input: string; output: string }[]>(
-    []
-  );
+  const [history, setHistory] = useState<{ input: string; output: string }[]>([]);
 
   useEffect(() => {
     try {
@@ -74,9 +72,9 @@ export const useChatGPT = () => {
       saveTotalTokens(response.data.usage.total_tokens);
       setOutput(response.data.choices[0].message.content);
       saveHistory(response.data.choices[0].message.content);
-    } catch (error) {
-      console.log(error);
-      setOutput("リクエストが失敗しました");
+    } catch (error: any) {
+      console.log(error.response.data.error.message);
+      setOutput("リクエストが失敗しました。\n\nerror: " + error.response.data.error.message);
     }
   };
 
@@ -123,10 +121,7 @@ export const useChatGPT = () => {
     try {
       setTotalTokens((prevTokens: any) => prevTokens + value);
       const data = window.localStorage.getItem("totalTokens");
-      window.localStorage.setItem(
-        "totalTokens",
-        JSON.stringify(Number(data) + value)
-      );
+      window.localStorage.setItem("totalTokens", JSON.stringify(Number(data) + value));
     } catch (error) {
       console.log(error);
     }
@@ -200,9 +195,5 @@ export const ChatGPTContext = createContext<ChatGPT>({
 
 export const ChatGPTProvider = ({ children }: { children: any }) => {
   const chatGPT = useChatGPT();
-  return (
-    <ChatGPTContext.Provider value={chatGPT}>
-      {children}
-    </ChatGPTContext.Provider>
-  );
+  return <ChatGPTContext.Provider value={chatGPT}>{children}</ChatGPTContext.Provider>;
 };
