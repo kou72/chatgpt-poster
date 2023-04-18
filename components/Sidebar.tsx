@@ -1,15 +1,14 @@
-import { useContext } from "react";
-import { ChatGPTContext } from "../hooks/useChatGPT";
+import { useChatGPT } from '../hooks/useChatGPT'
 
 const Sidebar = () => {
-  const { chatgpt, handleChatgpt } = useContext(ChatGPTContext);
-  const usedYen = chatgpt.totalTokens * (0.002 / 1000) * 150;
+  const { chatgpt, handleChatgpt } = useChatGPT()
+  const usedYen = chatgpt.totalTokens * (0.002 / 1000) * 150
 
   const handleClick = (index: number) => {
-    handleChatgpt.setInput(chatgpt.history[index].input);
-    handleChatgpt.setOutput(chatgpt.history[index].output);
-    console.log(chatgpt.history[index].input, chatgpt.history[index].output);
-  };
+    handleChatgpt.setInput(chatgpt.history[index].input)
+    handleChatgpt.setOutput(chatgpt.history[index].output)
+    console.log(chatgpt.history[index].input, chatgpt.history[index].output)
+  }
 
   return (
     <div className="bg-gray-600 min-h-screen pt-12 text-center">
@@ -37,7 +36,7 @@ const Sidebar = () => {
         </ul>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar
