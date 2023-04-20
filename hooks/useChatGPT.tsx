@@ -36,6 +36,7 @@ export const historyState = atom({
   key: 'historyState',
   default: initHistory,
 })
+export const systemState = atom({ key: 'system', default: '' })
 
 export const useChatGPT = () => {
   const [apikey, setApikey] = useRecoilState(apikeyState)
@@ -47,6 +48,7 @@ export const useChatGPT = () => {
   const [output, setOutput] = useRecoilState(outputState)
   const [totalTokens, setTotalTokens] = useRecoilState(totalTokensState)
   const [history, setHistory] = useRecoilState(historyState)
+  const [system, setSystem] = useRecoilState(systemState)
 
   useEffect(() => {
     try {
@@ -57,6 +59,12 @@ export const useChatGPT = () => {
       setTotalTokens(getLocalStrage('totalTokens', 0))
       setMaxTokenCheck(getLocalStrage('totalTokenCheck', true))
       setHistory(getLocalStrage('history', initHistory))
+      setSystem(
+        getLocalStrage(
+          'system',
+          'あなたは対話型AIのChat-GPTです。質問に回答してください。'
+        )
+      )
     } catch (error) {
       console.log(error)
     }
@@ -146,6 +154,7 @@ export const useChatGPT = () => {
       totalTokens,
       maxTokenCheck,
       history,
+      system,
     },
     handleChatgpt: {
       saveApikey,
