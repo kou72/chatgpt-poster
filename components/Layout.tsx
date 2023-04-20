@@ -1,9 +1,13 @@
-import Header from "./Header";
-import Sidebar from "./Sidebar";
+import Header from './Header'
+import Sidebar from './Sidebar'
+import Head from 'next/head'
 
 export default function Layout({ children }: { children: any }) {
   return (
     <>
+      <Head>
+        <title>Chat-GPT Poster</title>
+      </Head>
       <Header />
       <div className="flex min-h-screen">
         <div className="w-2/12">
@@ -14,5 +18,5 @@ export default function Layout({ children }: { children: any }) {
         </div>
       </div>
     </>
-  );
+  )
 }
