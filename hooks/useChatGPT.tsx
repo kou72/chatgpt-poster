@@ -72,13 +72,17 @@ export const useChatGPT = () => {
 
   const requestChatGPT = async () => {
     const URL = 'https://api.openai.com/v1/chat/completions'
+    const messages = []
+    if (system != '') messages.push({ role: 'system', content: system })
+    messages.push({ role: 'user', content: input })
+
     setOutput('リクエスト中...')
     try {
       const response = await axios.post(
         URL,
         {
           model: model,
-          messages: [{ role: 'user', content: input }],
+          messages: messages,
           temperature: temperature,
           max_tokens: maxTokenCheck ? maxTokens : null,
         },
@@ -167,6 +171,7 @@ export const useChatGPT = () => {
       setOutput,
       requestChatGPT,
       saveHistory,
+      setSystem,
     },
   }
 }

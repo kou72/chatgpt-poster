@@ -1,5 +1,4 @@
 import { useChatGPT } from '../hooks/useChatGPT'
-import Head from 'next/head'
 // import MarkdownPreview from "../components/MarkdownPreview";
 import ReactMarkdown from 'react-markdown'
 
@@ -13,40 +12,43 @@ export default function Home() {
     }
   }
 
-  const main = () => {
-    return (
-      <div className="bg-gray-700 min-h-screen pt-12">
-        <div className="grid grid-cols-2 p-2 gap-2">
-          <div className="col-span-1">
-            <Textarea />
+  return (
+    <div className="bg-gray-700 min-h-screen pt-12">
+      <div className="flex flex-col h-full">
+        <div className="h-1/12">
+          <div className="grid grid-cols-2 px-2 pt-2 gap-2">
+            <div className="col-span-1">
+              <textarea
+                className="bg-gray-300 w-full overflow-y-auto p-1"
+                value={chatgpt.system}
+                onChange={(e) => handleChatgpt.setSystem(e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e)}
+              ></textarea>
+            </div>
+            <div className="col-span-1">
+              <button>ボタン</button>
+            </div>
           </div>
-          <div className="col-span-1">
-            <Response />
+        </div>
+        <div className="h-11/12">
+          <div className="grid grid-cols-2 p-2 gap-2">
+            <div className="col-span-1">
+              <textarea
+                className="bg-gray-300 w-full h-[calc(100vh-9rem)] overflow-y-auto p-1"
+                value={chatgpt.input}
+                onChange={(e) => handleChatgpt.setInput(e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e)}
+              ></textarea>
+            </div>
+            <div className="col-span-1">
+              <div className="markdown-body h-[calc(100vh-9rem)] overflow-y-auto">
+                {/* <MarkdownPreview>{chatgpt.output}</MarkdownPreview> */}
+                <ReactMarkdown>{chatgpt.output}</ReactMarkdown>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    )
-  }
-
-  const Textarea = () => {
-    return (
-      <textarea
-        className="bg-gray-300 w-full h-[calc(100vh-5rem)] overflow-y-auto p-1"
-        value={chatgpt.input}
-        onChange={(e) => handleChatgpt.setInput(e.target.value)}
-        onKeyDown={(e) => handleKeyDown(e)}
-      ></textarea>
-    )
-  }
-
-  const Response = () => {
-    return (
-      <div className="markdown-body h-[calc(100vh-5rem)] overflow-y-auto">
-        {/* <MarkdownPreview>{chatgpt.output}</MarkdownPreview> */}
-        <ReactMarkdown>{chatgpt.output}</ReactMarkdown>
-      </div>
-    )
-  }
-
-  return main()
+    </div>
+  )
 }

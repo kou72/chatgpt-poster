@@ -22,7 +22,7 @@ const Sidebar = () => {
           Reset
         </button>
       </div>
-      <div className="h-[60vh] overflow-y-auto">
+      <div className="h-[65vh] overflow-y-auto">
         <ul className="list-none w-full flex flex-col-reverse">
           {chatgpt.history.map((item, index) => (
             <li
