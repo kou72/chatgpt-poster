@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 interface Props {
   hedaer: JSX.Element
@@ -10,6 +10,13 @@ interface Props {
 }
 
 export const Layout = (props: Props) => {
+  const headerHeightParcentage = useRef(0)
+
+  useEffect(() => {
+    headerHeightParcentage.current = (48 / window.innerHeight) * 100
+    console.log(headerHeightParcentage.current)
+  }, [])
+
   const [sidebarWidth, setSidebarWidth] = useState(20)
 
   const handleMouseDown = (e: { preventDefault: () => void }) => {
@@ -29,7 +36,7 @@ export const Layout = (props: Props) => {
 
   return (
     <>
-      <div className="fixed w-full h-12 z-10">{props.hedaer}</div>
+      <div className="fixed w-full z-10 h-[48px]">{props.hedaer}</div>
       <div className="flex min-h-screen">
         <div style={{ width: `${sidebarWidth}%` }}>{props.sidebar}</div>
         <div
