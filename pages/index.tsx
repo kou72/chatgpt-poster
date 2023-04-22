@@ -1,30 +1,17 @@
-import React, { useState, useRef } from 'react'
 import { useChatGPT } from '../hooks/useChatGPT'
 // import MarkdownPreview from "../components/MarkdownPreview";
 import ReactMarkdown from 'react-markdown'
 import { SystemTextArea } from '@/components/SystemTextArea'
+import { PresentChats } from '@/components/PresentChats'
 
 export default function Home() {
   const { chatgpt, handleChatgpt } = useChatGPT()
-  const [expanded, setExpanded] = useState(false)
-  const [arrowDirection, setArrowDirection] = useState('down')
-  const textAreaRef = useRef(null)
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
       console.log('key down cmd + Enter')
       handleChatgpt.requestChatGPT()
     }
-  }
-
-  const handleButtonClick = () => {
-    setExpanded(!expanded)
-    setArrowDirection(arrowDirection === 'down' ? 'up' : 'down')
-  }
-
-  const handleBlur = () => {
-    setExpanded(false)
-    setArrowDirection('down')
   }
 
   return (
@@ -36,20 +23,7 @@ export default function Home() {
               <SystemTextArea />
             </div>
             <div className="col-span-1">
-              <button className="w-full" onClick={handleButtonClick}>
-                {arrowDirection === 'down' ? '▼' : '▲'}
-              </button>
-              <div
-                className={`${
-                  expanded ? 'h-[calc(100vh-9rem)]' : 'h-0'
-                } overflow-hidden bg-gray-300 w-full absolute top-12 transition-all duration-500 ease-in-out`}
-              >
-                <textarea
-                  ref={textAreaRef}
-                  className={`bg-gray-300 w-full h-[calc(100vh-9rem)] overflow-y-auto p-1 transition-all duration-500 ease-in-out`}
-                  onBlur={handleBlur}
-                ></textarea>
-              </div>
+              <PresentChats />
             </div>
           </div>
         </div>
