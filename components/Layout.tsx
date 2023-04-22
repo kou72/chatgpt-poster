@@ -3,10 +3,10 @@ import { useState, useEffect, useRef } from 'react'
 interface Props {
   hedaer: JSX.Element
   sidebar: JSX.Element
-  topLeft: JSX.Element
-  topRight: JSX.Element
-  bottomLeft: JSX.Element
-  bottomRight: JSX.Element
+  leftTop: JSX.Element
+  leftBottom: JSX.Element
+  rightTop: JSX.Element
+  rightBottom: JSX.Element
 }
 
 export const Layout = (props: Props) => {
@@ -44,19 +44,32 @@ export const Layout = (props: Props) => {
           onMouseDown={handleMouseDown}
         ></div>
         <div className="flex-grow">
+          {/* <div style={{ width: `40%` }}>
+          <div className="grid grid-cols-2 px-2 pt-2 gap-2">
+            <div className="col-span-1">{props.leftTop}</div>
+            <div className="col-span-1">{props.leftBottom}</div>
+          </div>
+        </div>
+        <div style={{ width: `40%` }}>
+          <div className="grid grid-cols-2 px-2 pt-2 gap-2">
+            <div className="col-span-1">{props.rightTop}</div>
+            <div className="col-span-1">{props.rightBottom}</div>
+          </div>
+        </div>
+      </div> */}
           {/* --- */}
           <div className="bg-gray-700 min-h-screen pt-12">
             <div className="flex flex-col h-full">
               <div className="h-1/12">
                 <div className="grid grid-cols-2 px-2 pt-2 gap-2">
-                  <div className="col-span-1">{props.topLeft}</div>
-                  <div className="col-span-1">{props.topRight}</div>
+                  <div className="col-span-1">{props.leftTop}</div>
+                  <div className="col-span-1">{props.rightTop}</div>
                 </div>
               </div>
               <div className="h-11/12">
                 <div className="grid grid-cols-2 p-2 gap-2 h-[calc(100vh-9rem)]">
-                  <div className="col-span-1">{props.bottomLeft}</div>
-                  <div className="col-span-1">{props.bottomRight}</div>
+                  <div className="col-span-1">{props.leftBottom}</div>
+                  <div className="col-span-1">{props.rightBottom}</div>
                 </div>
               </div>
             </div>

@@ -16,10 +16,10 @@ const Home = () => {
       <Layout
         hedaer={<Header />}
         sidebar={<Sidebar />}
-        topLeft={<SystemTextArea />}
-        topRight={<PresentChats />}
-        bottomLeft={<UserTextArea />}
-        bottomRight={<Response />}
+        leftTop={<SystemTextArea />}
+        leftBottom={<UserTextArea />}
+        rightTop={<PresentChats />}
+        rightBottom={<Response />}
       />
     </>
   )
