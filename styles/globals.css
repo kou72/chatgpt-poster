@@ -1,5 +1,10 @@
 @tailwind base;
 @tailwind components;
+
+body {
+  @apply text-sm;
+}
+
 ul {
   list-style: disc;
   list-style-type: disc;
