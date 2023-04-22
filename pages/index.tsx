@@ -1,13 +1,9 @@
-import { useChatGPT } from '../hooks/useChatGPT'
-// import MarkdownPreview from "../components/MarkdownPreview";
-import ReactMarkdown from 'react-markdown'
 import { SystemTextArea } from '@/components/SystemTextArea'
 import { UserTextArea } from '@/components/UserTextArea'
 import { PresentChats } from '@/components/PresentChats'
+import { Response } from '@/components/Response'
 
 export default function Home() {
-  const { chatgpt, handleChatgpt } = useChatGPT()
-
   return (
     <div className="bg-gray-700 min-h-screen pt-12">
       <div className="flex flex-col h-full">
@@ -27,10 +23,7 @@ export default function Home() {
               <UserTextArea />
             </div>
             <div className="col-span-1">
-              <div className="markdown-body h-full overflow-y-auto">
-                {/* <MarkdownPreview>{chatgpt.output}</MarkdownPreview> */}
-                <ReactMarkdown>{chatgpt.output}</ReactMarkdown>
-              </div>
+              <Response />
             </div>
           </div>
         </div>

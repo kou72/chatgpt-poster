@@ -155,6 +155,7 @@ export const useChatGPT = () => {
   return {
     system,
     input,
+    output,
     chatgpt: {
       apikey,
       model,
