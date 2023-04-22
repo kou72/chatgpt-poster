@@ -11,11 +11,10 @@ interface Props {
 
 export const Layout = (props: Props) => {
   const headerHeight = 48
-  const barHeight = 2
   const [sidebarWidth, setSidebarWidth] = useState(20)
   const [leftWidth, setLeftWidth] = useState(40)
-  const [topHeight, setTopHeight] = useState(50)
-  const [bottomHeight, setBottomHeight] = useState(50)
+  const [topHeight, setTopHeight] = useState(20)
+  const [bottomHeight, setBottomHeight] = useState(80)
 
   useEffect(() => {
     const contents = 100 - (headerHeight / window.innerHeight) * 100
@@ -26,7 +25,7 @@ export const Layout = (props: Props) => {
   const SidebarWidthHandleBar = () => {
     return (
       <div
-        className="bg-gray-300 w-1 cursor-col-resize z-2"
+        className="bg-gray-500 w-1 cursor-col-resize z-2"
         onMouseDown={sidebarHandlerDown}
       ></div>
     )
@@ -51,7 +50,7 @@ export const Layout = (props: Props) => {
   const LeftRightWidthHandleBar = () => {
     return (
       <div
-        className="bg-gray-300 w-1 cursor-col-resize z-2"
+        className="bg-gray-500 w-1 cursor-col-resize z-2"
         onMouseDown={LeftRightHandlerDown}
       ></div>
     )
@@ -76,7 +75,7 @@ export const Layout = (props: Props) => {
   const TopBottomHeightHandleBar = () => {
     return (
       <div
-        className="bg-gray-300 h-1 cursor-row-resize z-2"
+        className="bg-gray-500 h-1 cursor-row-resize z-2"
         onMouseDown={TopBottomHandlerDown}
       ></div>
     )
@@ -106,20 +105,20 @@ export const Layout = (props: Props) => {
         {props.hedaer}
       </div>
       <div className={`w-full pb-[${headerHeight}px]`}></div>
-      <div className="flex" style={{ height: `${topHeight + bottomHeight}vh` }}>
+      <div
+        className="flex bg-gray-700"
+        style={{ height: `${topHeight + bottomHeight}vh` }}
+      >
         <div style={{ width: `${sidebarWidth}%` }} className="overflow-auto">
           {props.sidebar}
         </div>
         <SidebarWidthHandleBar />
-
         <div className="h-full" style={{ width: `${leftWidth}%` }}>
           <div className="p-1" style={{ height: `${topHeight}vh` }}>
             {props.leftTop}
           </div>
           <TopBottomHeightHandleBar />
-          <div className="p-1" style={{ height: `${bottomHeight}vh` }}>
-            {props.leftBottom}
-          </div>
+          <div className="p-1 flex-grow">{props.leftBottom}</div>
         </div>
         <LeftRightWidthHandleBar />
         <div className="h-full flex-grow">
@@ -127,9 +126,7 @@ export const Layout = (props: Props) => {
             {props.rightTop}
           </div>
           <TopBottomHeightHandleBar />
-          <div className="p-1" style={{ height: `${bottomHeight}vh` }}>
-            {props.rightBottom}
-          </div>
+          <div className="p-1 flex-grow">{props.rightBottom}</div>
         </div>
       </div>
     </>
