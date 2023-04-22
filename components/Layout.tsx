@@ -12,28 +12,44 @@ interface Props {
 export const Layout = (props: Props) => {
   const headerHeight = 48
   const [contentsHeight, setContentsHeight] = useState(100)
+  const [sidebarWidth, setSidebarWidth] = useState(20)
+  const [userTextWidth, setUserTextWidth] = useState(40)
 
   useEffect(() => {
     const height = 100 - (headerHeight / window.innerHeight) * 100
     setContentsHeight(height)
   }, [])
 
-  const [sidebarWidth, setSidebarWidth] = useState(20)
-
-  const handleMouseDown = (e: { preventDefault: () => void }) => {
+  const sidebarHandlerDown = (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('mousemove', handleSidebarWidth)
+    document.addEventListener('mouseup', sidebarHandlerUp)
   }
 
-  const handleMouseMove = (e: { clientX: number }) => {
+  const handleSidebarWidth = (e: { clientX: number }) => {
     const width = (e.clientX / window.innerWidth) * 100
     setSidebarWidth(width)
   }
 
-  const handleMouseUp = () => {
-    document.removeEventListener('mousemove', handleMouseMove)
-    document.removeEventListener('mouseup', handleMouseUp)
+  const sidebarHandlerUp = () => {
+    document.removeEventListener('mousemove', handleSidebarWidth)
+    document.removeEventListener('mouseup', sidebarHandlerUp)
+  }
+
+  const userTextHandlerDown = (e: { preventDefault: () => void }) => {
+    e.preventDefault()
+    document.addEventListener('mousemove', handleUserTextWidth)
+    document.addEventListener('mouseup', userTextHandlerUp)
+  }
+
+  const handleUserTextWidth = (e: { clientX: number }) => {
+    const width = (e.clientX / window.innerWidth) * 100 - sidebarWidth
+    setUserTextWidth(width)
+  }
+
+  const userTextHandlerUp = () => {
+    document.removeEventListener('mousemove', handleUserTextWidth)
+    document.removeEventListener('mouseup', userTextHandlerUp)
   }
 
   return (
@@ -48,16 +64,19 @@ export const Layout = (props: Props) => {
         </div>
         <div
           className="bg-gray-300 w-1 cursor-col-resize z-2"
-          onMouseDown={handleMouseDown}
+          onMouseDown={sidebarHandlerDown}
         ></div>
-        {/* <div className="flex-grow"> */}
-        <div style={{ width: `40%` }}>
+        <div style={{ width: `${userTextWidth}%` }}>
           <div className="grid grid-cols-2 px-2 pt-2 gap-2 bg-blue-300 h-full">
             {/* <div className="col-span-1">{props.leftTop}</div>
               <div className="col-span-1">{props.leftBottom}</div> */}
           </div>
         </div>
-        <div style={{ width: `40%` }}>
+        <div
+          className="bg-gray-300 w-1 cursor-col-resize z-2"
+          onMouseDown={userTextHandlerDown}
+        ></div>
+        <div className="flex-grow">
           <div className="grid grid-cols-2 px-2 pt-2 gap-2 bg-blue-700 h-full">
             {/* <div className="col-span-1">{props.rightTop}</div>
               <div className="col-span-1">{props.rightBottom}</div> */}
