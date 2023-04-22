@@ -10,11 +10,11 @@ interface Props {
 }
 
 export const Layout = (props: Props) => {
-  const headerHeightParcentage = useRef(0)
+  const [contentsHeight, setContentsHeight] = useState(100)
 
   useEffect(() => {
-    headerHeightParcentage.current = (48 / window.innerHeight) * 100
-    console.log(headerHeightParcentage.current)
+    const height = 100 - (48 / window.innerHeight) * 100
+    setContentsHeight(height)
   }, [])
 
   const [sidebarWidth, setSidebarWidth] = useState(20)
@@ -37,28 +37,31 @@ export const Layout = (props: Props) => {
   return (
     <>
       <div className="fixed w-full z-10 h-[48px]">{props.hedaer}</div>
-      <div className="flex min-h-screen">
-        <div style={{ width: `${sidebarWidth}%` }}>{props.sidebar}</div>
+      <div className="w-full pb-[48px]"></div>
+      <div className="flex" style={{ height: `${contentsHeight}vh` }}>
+        <div style={{ width: `${sidebarWidth}%` }} className="overflow-auto">
+          {props.sidebar}
+        </div>
         <div
           className="bg-gray-300 w-1 cursor-col-resize z-2"
           onMouseDown={handleMouseDown}
         ></div>
-        <div className="flex-grow">
-          {/* <div style={{ width: `40%` }}>
-          <div className="grid grid-cols-2 px-2 pt-2 gap-2">
-            <div className="col-span-1">{props.leftTop}</div>
-            <div className="col-span-1">{props.leftBottom}</div>
+        {/* <div className="flex-grow"> */}
+        <div style={{ width: `40%` }}>
+          <div className="grid grid-cols-2 px-2 pt-2 gap-2 bg-blue-300 h-full">
+            {/* <div className="col-span-1">{props.leftTop}</div>
+              <div className="col-span-1">{props.leftBottom}</div> */}
           </div>
         </div>
         <div style={{ width: `40%` }}>
-          <div className="grid grid-cols-2 px-2 pt-2 gap-2">
-            <div className="col-span-1">{props.rightTop}</div>
-            <div className="col-span-1">{props.rightBottom}</div>
+          <div className="grid grid-cols-2 px-2 pt-2 gap-2 bg-blue-700 h-full">
+            {/* <div className="col-span-1">{props.rightTop}</div>
+              <div className="col-span-1">{props.rightBottom}</div> */}
           </div>
         </div>
-      </div> */}
-          {/* --- */}
-          <div className="bg-gray-700 min-h-screen pt-12">
+      </div>
+      {/* --- */}
+      {/* <div className="bg-gray-700 min-h-screen">
             <div className="flex flex-col h-full">
               <div className="h-1/12">
                 <div className="grid grid-cols-2 px-2 pt-2 gap-2">
@@ -73,10 +76,10 @@ export const Layout = (props: Props) => {
                 </div>
               </div>
             </div>
-          </div>
-          {/* --- */}
-        </div>
-      </div>
+          </div> */}
+      {/* --- */}
+      {/* </div> */}
+      {/* </div> */}
     </>
   )
 }
