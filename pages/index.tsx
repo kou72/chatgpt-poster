@@ -2,17 +2,11 @@ import { useChatGPT } from '../hooks/useChatGPT'
 // import MarkdownPreview from "../components/MarkdownPreview";
 import ReactMarkdown from 'react-markdown'
 import { SystemTextArea } from '@/components/SystemTextArea'
+import { UserTextArea } from '@/components/UserTextArea'
 import { PresentChats } from '@/components/PresentChats'
 
 export default function Home() {
   const { chatgpt, handleChatgpt } = useChatGPT()
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
-      console.log('key down cmd + Enter')
-      handleChatgpt.requestChatGPT()
-    }
-  }
 
   return (
     <div className="bg-gray-700 min-h-screen pt-12">
@@ -28,17 +22,12 @@ export default function Home() {
           </div>
         </div>
         <div className="h-11/12">
-          <div className="grid grid-cols-2 p-2 gap-2">
+          <div className="grid grid-cols-2 p-2 gap-2 h-[calc(100vh-9rem)]">
             <div className="col-span-1">
-              <textarea
-                className="bg-gray-300 w-full h-[calc(100vh-9rem)] overflow-y-auto p-1"
-                value={chatgpt.input}
-                onChange={(e) => handleChatgpt.setInput(e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e)}
-              ></textarea>
+              <UserTextArea />
             </div>
             <div className="col-span-1">
-              <div className="markdown-body h-[calc(100vh-9rem)] overflow-y-auto">
+              <div className="markdown-body h-full overflow-y-auto">
                 {/* <MarkdownPreview>{chatgpt.output}</MarkdownPreview> */}
                 <ReactMarkdown>{chatgpt.output}</ReactMarkdown>
               </div>

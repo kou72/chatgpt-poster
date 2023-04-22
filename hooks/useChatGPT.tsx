@@ -154,6 +154,7 @@ export const useChatGPT = () => {
 
   return {
     system,
+    input,
     chatgpt: {
       apikey,
       model,
@@ -167,6 +168,7 @@ export const useChatGPT = () => {
       system,
     },
     setSystem,
+    setInput,
     requestChatGPT,
     handleChatgpt: {
       saveApikey,
