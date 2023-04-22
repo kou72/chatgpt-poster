@@ -10,10 +10,11 @@ interface Props {
 }
 
 export const Layout = (props: Props) => {
+  const headerHeight = 48
   const [contentsHeight, setContentsHeight] = useState(100)
 
   useEffect(() => {
-    const height = 100 - (48 / window.innerHeight) * 100
+    const height = 100 - (headerHeight / window.innerHeight) * 100
     setContentsHeight(height)
   }, [])
 
@@ -26,7 +27,8 @@ export const Layout = (props: Props) => {
   }
 
   const handleMouseMove = (e: { clientX: number }) => {
-    setSidebarWidth((e.clientX / window.innerWidth) * 100)
+    const width = (e.clientX / window.innerWidth) * 100
+    setSidebarWidth(width)
   }
 
   const handleMouseUp = () => {
@@ -36,8 +38,10 @@ export const Layout = (props: Props) => {
 
   return (
     <>
-      <div className="fixed w-full z-10 h-[48px]">{props.hedaer}</div>
-      <div className="w-full pb-[48px]"></div>
+      <div className={`fixed w-full z-10 h-[${headerHeight}px]`}>
+        {props.hedaer}
+      </div>
+      <div className={`w-full pb-[${headerHeight}px]`}></div>
       <div className="flex" style={{ height: `${contentsHeight}vh` }}>
         <div style={{ width: `${sidebarWidth}%` }} className="overflow-auto">
           {props.sidebar}
