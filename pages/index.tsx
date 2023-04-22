@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import { useChatGPT } from '../hooks/useChatGPT'
 // import MarkdownPreview from "../components/MarkdownPreview";
 import ReactMarkdown from 'react-markdown'
+import { SystemTextArea } from '@/components/SystemTextArea'
 
 export default function Home() {
   const { chatgpt, handleChatgpt } = useChatGPT()
@@ -32,12 +33,7 @@ export default function Home() {
         <div className="h-1/12">
           <div className="grid grid-cols-2 px-2 pt-2 gap-2">
             <div className="col-span-1">
-              <textarea
-                className="bg-gray-300 w-full overflow-y-auto p-1"
-                value={chatgpt.system}
-                onChange={(e) => handleChatgpt.setSystem(e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e)}
-              ></textarea>
+              <SystemTextArea />
             </div>
             <div className="col-span-1">
               <button className="w-full" onClick={handleButtonClick}>
