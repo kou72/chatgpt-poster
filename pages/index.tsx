@@ -1,9 +1,24 @@
+import Head from 'next/head'
 import { SystemTextArea } from '@/components/SystemTextArea'
 import { UserTextArea } from '@/components/UserTextArea'
 import { PresentChats } from '@/components/PresentChats'
 import { Response } from '@/components/Response'
+import { Layout } from '@/components/Layout'
 
-export default function Home() {
+const Home = () => {
+  return (
+    <>
+      <Head>
+        <title>Chat-GPT Poster</title>
+      </Head>
+      <Layout>
+        <ChatGPTPoster />
+      </Layout>
+    </>
+  )
+}
+
+const ChatGPTPoster = () => {
   return (
     <div className="bg-gray-700 min-h-screen pt-12">
       <div className="flex flex-col h-full">
@@ -31,3 +46,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home

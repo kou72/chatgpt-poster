@@ -6,14 +6,12 @@ const Header = () => {
 
   const main = () => {
     return (
-      <div className="fixed top-0 left-0 w-full h-12 bg-gray-800 z-10">
-        <div className="flex items-center h-12 gap-1">
-          <ApiKey />
-          <Model />
-          <Temperature />
-          <MaxTokens />
-          <SendButton />
-        </div>
+      <div className="h-full flex items-center gap-1 bg-gray-800">
+        <ApiKey />
+        <Model />
+        <Temperature />
+        <MaxTokens />
+        <SendButton />
       </div>
     )
   }

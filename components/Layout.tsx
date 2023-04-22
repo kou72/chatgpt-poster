@@ -3,7 +3,7 @@ import Header from './Header'
 import Sidebar from './Sidebar'
 import Head from 'next/head'
 
-export default function Layout({ children }: { children: any }) {
+export const Layout = ({ children }: { children: any }) => {
   const [sidebarWidth, setSidebarWidth] = useState(20)
 
   const handleMouseDown = (e: { preventDefault: () => void }) => {
@@ -23,10 +23,9 @@ export default function Layout({ children }: { children: any }) {
 
   return (
     <>
-      <Head>
-        <title>Chat-GPT Poster</title>
-      </Head>
-      <Header />
+      <div className="fixed w-full h-12 z-10">
+        <Header />
+      </div>
       <div className="flex min-h-screen">
         <div style={{ width: `${sidebarWidth}%` }}>
           <Sidebar />
