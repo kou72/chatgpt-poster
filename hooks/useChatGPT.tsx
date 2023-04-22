@@ -97,11 +97,16 @@ export const useChatGPT = () => {
       setOutput(response.data.choices[0].message.content)
       saveHistory(response.data.choices[0].message.content)
     } catch (error: any) {
-      console.log(error.response.data.error.message)
-      setOutput(
-        'リクエストが失敗しました。\n\nerror: ' +
-          error.response.data.error.message
-      )
+      if (error.message) {
+        console.error(error.message)
+        setOutput('リクエストが失敗しました。\n\nerror: ' + error.message)
+      } else if (error.response.data) {
+        console.error(error.response.data.error.message)
+        setOutput(
+          'リクエストが失敗しました。\n\nerror: ' +
+            error.response.data.error.message
+        )
+      }
     }
   }
 
@@ -148,6 +153,7 @@ export const useChatGPT = () => {
   }
 
   return {
+    system,
     chatgpt: {
       apikey,
       model,
@@ -160,6 +166,8 @@ export const useChatGPT = () => {
       history,
       system,
     },
+    setSystem,
+    requestChatGPT,
     handleChatgpt: {
       saveApikey,
       saveModel,
