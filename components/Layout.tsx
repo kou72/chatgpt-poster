@@ -101,32 +101,41 @@ export const Layout = (props: Props) => {
 
   return (
     <>
-      <div className={`fixed w-full z-10 h-[${headerHeight}px]`}>
+      <div
+        className="fixed w-full z-10"
+        style={{ height: `${headerHeight}px` }}
+      >
         {props.hedaer}
       </div>
-      <div className={`w-full pb-[${headerHeight}px]`}></div>
+      <div
+        className="w-full"
+        style={{ paddingBottom: `${headerHeight}px` }}
+      ></div>
       <div
         className="flex bg-gray-700"
         style={{ height: `${topHeight + bottomHeight}vh` }}
       >
-        <div style={{ width: `${sidebarWidth}%` }} className="overflow-auto">
+        <div className="overflow-auto" style={{ width: `${sidebarWidth}%` }}>
           {props.sidebar}
         </div>
         <SidebarWidthHandleBar />
-        <div className="h-full" style={{ width: `${leftWidth}%` }}>
+        <div
+          className="h-full flex flex-col"
+          style={{ width: `${leftWidth}%` }}
+        >
           <div className="p-1" style={{ height: `${topHeight}vh` }}>
             {props.leftTop}
           </div>
           <TopBottomHeightHandleBar />
-          <div className="p-1 flex-grow">{props.leftBottom}</div>
+          <div className="p-1 grow">{props.leftBottom}</div>
         </div>
         <LeftRightWidthHandleBar />
-        <div className="h-full flex-grow">
+        <div className="h-full flex flex-col grow">
           <div className="p-1" style={{ height: `${topHeight}vh` }}>
             {props.rightTop}
           </div>
           <TopBottomHeightHandleBar />
-          <div className="p-1 flex-grow">{props.rightBottom}</div>
+          <div className="p-1 grow">{props.rightBottom}</div>
         </div>
       </div>
     </>

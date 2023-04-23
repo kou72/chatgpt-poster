@@ -18,7 +18,7 @@ const Home = () => {
         sidebar={<Sidebar />}
         leftTop={<SystemTextArea />}
         leftBottom={<UserTextArea />}
-        rightTop={<PresentChats />}
+        rightTop={<SystemTextArea />}
         rightBottom={<Response />}
       />
     </>
