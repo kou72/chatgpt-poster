@@ -11,7 +11,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="bg-gray-600 min-h-screen text-center">
+    <div className="bg-gray-600 h-full text-center">
       <div className="p-4">
         <div className="border border-white rounded-md p-4">
           <p className="m-2 text-white">使った金額</p>

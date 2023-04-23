@@ -146,7 +146,10 @@ export const Layout = (props: Props) => {
             {props.leftTop}
           </div>
           <TopBottomHeightHandleBar />
-          <div className="p-1" style={{ height: `${bottomHeight}px` }}>
+          <div
+            className="px-1 pt-1 pb-3"
+            style={{ height: `${bottomHeight}px` }}
+          >
             {props.leftBottom}
           </div>
         </div>
@@ -159,7 +162,10 @@ export const Layout = (props: Props) => {
             {props.rightTop}
           </div>
           <TopBottomHeightHandleBar />
-          <div className="p-1" style={{ height: `${bottomHeight}px` }}>
+          <div
+            className="px-1 pt-1 pb-4"
+            style={{ height: `${bottomHeight}px` }}
+          >
             {props.rightBottom}
           </div>
         </div>
