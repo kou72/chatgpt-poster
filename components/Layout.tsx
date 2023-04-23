@@ -11,22 +11,30 @@ interface Props {
 
 export const Layout = (props: Props) => {
   const headerHeight = 48
-  const [sidebarWidth, setSidebarWidth] = useState(20)
-  const [leftWidth, setLeftWidth] = useState(40)
-  const [topHeight, setTopHeight] = useState(20)
-  const [bottomHeight, setBottomHeight] = useState(80)
+  const barWidth = 4
+  const [topHeight, setTopHeight] = useState(0)
+  const [bottomHeight, setBottomHeight] = useState(0)
+  const [sidebarWidth, setSidebarWidth] = useState(0)
+  const [leftWidth, setLeftWidth] = useState(0)
+  const [rightWidth, setRightWidth] = useState(0)
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    const contents = 100 - (headerHeight / window.innerHeight) * 100
-    const bottom = contents - topHeight
-    setBottomHeight(bottom)
+    const height = window.innerHeight - (headerHeight + barWidth)
+    setTopHeight(height * 0.2)
+    setBottomHeight(height * 0.8)
+
+    const width = window.innerWidth - barWidth * 2
+    setSidebarWidth(width * 0.2)
+    setLeftWidth(width * 0.4)
+    setRightWidth(width * 0.4)
   }, [])
 
   const SidebarWidthHandleBar = () => {
     return (
       <div
-        className="bg-gray-500 w-1 cursor-col-resize z-2"
+        className="bg-gray-500 cursor-col-resize z-2"
+        style={{ width: `${barWidth}px` }}
         onMouseDown={sidebarHandlerDown}
       ></div>
     )
@@ -39,8 +47,13 @@ export const Layout = (props: Props) => {
   }
 
   const handleSidebarWidth = (e: { clientX: number }) => {
-    const width = (e.clientX / window.innerWidth) * 100
-    setSidebarWidth(width)
+    const sidebar = e.clientX
+    const contents = window.innerWidth - (sidebar + barWidth * 2)
+    const left = contents * (leftWidth / (leftWidth + rightWidth))
+    const right = contents * (rightWidth / (leftWidth + rightWidth))
+    setSidebarWidth(sidebar)
+    setLeftWidth(left)
+    setRightWidth(right)
   }
 
   const sidebarHandlerUp = () => {
@@ -51,7 +64,8 @@ export const Layout = (props: Props) => {
   const LeftRightWidthHandleBar = () => {
     return (
       <div
-        className="bg-gray-500 w-1 cursor-col-resize z-2"
+        className="bg-gray-500 cursor-col-resize z-2"
+        style={{ width: `${barWidth}px` }}
         onMouseDown={LeftRightHandlerDown}
       ></div>
     )
@@ -64,8 +78,11 @@ export const Layout = (props: Props) => {
   }
 
   const handleleftWidth = (e: { clientX: number }) => {
-    const width = (e.clientX / window.innerWidth) * 100 - sidebarWidth
-    setLeftWidth(width)
+    const contents = window.innerWidth - (sidebarWidth + barWidth * 2)
+    const right = window.innerWidth - (e.clientX + barWidth)
+    const left = contents - right
+    setLeftWidth(left)
+    setRightWidth(right)
   }
 
   const LeftRightHandlerUp = () => {
@@ -76,7 +93,8 @@ export const Layout = (props: Props) => {
   const TopBottomHeightHandleBar = () => {
     return (
       <div
-        className="bg-gray-500 h-1 cursor-row-resize z-2"
+        className="bg-gray-500 cursor-row-resize z-2"
+        style={{ height: `${barWidth}px` }}
         onMouseDown={TopBottomHandlerDown}
       ></div>
     )
@@ -89,8 +107,8 @@ export const Layout = (props: Props) => {
   }
 
   const handleTopBottomHeight = (e: { clientY: number }) => {
-    const top = ((e.clientY - headerHeight) / window.innerHeight) * 100
-    const bottom = ((window.innerHeight - e.clientY) / window.innerHeight) * 100
+    const top = e.clientY - (headerHeight + barWidth)
+    const bottom = window.innerHeight - e.clientY
     setTopHeight(top)
     setBottomHeight(bottom)
   }
@@ -114,29 +132,36 @@ export const Layout = (props: Props) => {
       ></div>
       <div
         className="flex bg-gray-700"
-        style={{ height: `${topHeight + bottomHeight}vh` }}
+        style={{ height: `${topHeight + bottomHeight + barWidth - 1}px` }}
       >
-        <div className="overflow-auto" style={{ width: `${sidebarWidth}%` }}>
+        <div className="overflow-auto" style={{ width: `${sidebarWidth}px` }}>
           {props.sidebar}
         </div>
         <SidebarWidthHandleBar />
         <div
           className="h-full flex flex-col"
-          style={{ width: `${leftWidth}%` }}
+          style={{ width: `${leftWidth}px` }}
         >
-          <div className="p-1" style={{ height: `${topHeight}vh` }}>
+          <div className="p-1" style={{ height: `${topHeight}px` }}>
             {props.leftTop}
           </div>
           <TopBottomHeightHandleBar />
-          <div className="p-1 grow">{props.leftBottom}</div>
+          <div className="p-1" style={{ height: `${bottomHeight}px` }}>
+            {props.leftBottom}
+          </div>
         </div>
         <LeftRightWidthHandleBar />
-        <div className="h-full flex flex-col grow">
-          <div className="p-1" style={{ height: `${topHeight}vh` }}>
+        <div
+          className="h-full flex flex-col"
+          style={{ width: `${rightWidth}px` }}
+        >
+          <div className="p-1" style={{ height: `${topHeight}px` }}>
             {props.rightTop}
           </div>
           <TopBottomHeightHandleBar />
-          <div className="p-1 grow">{props.rightBottom}</div>
+          <div className="p-1" style={{ height: `${bottomHeight}px` }}>
+            {props.rightBottom}
+          </div>
         </div>
       </div>
     </>
