@@ -50,6 +50,7 @@ export const useChatGPT = () => {
   const [history, setHistory] = useRecoilState(historyState)
   const [system, setSystem] = useRecoilState(systemState)
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     try {
       setApikey(getLocalStrage('apikey', ''))
@@ -59,12 +60,7 @@ export const useChatGPT = () => {
       setTotalTokens(getLocalStrage('totalTokens', 0))
       setMaxTokenCheck(getLocalStrage('totalTokenCheck', true))
       setHistory(getLocalStrage('history', initHistory))
-      setSystem(
-        getLocalStrage(
-          'system',
-          'あなたは対話型AIのChat-GPTです。質問に回答してください。'
-        )
-      )
+      setSystem(getLocalStrage('system', ''))
     } catch (error) {
       console.log(error)
     }
