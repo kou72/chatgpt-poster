@@ -16,6 +16,7 @@ export const Layout = (props: Props) => {
   const [topHeight, setTopHeight] = useState(20)
   const [bottomHeight, setBottomHeight] = useState(80)
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const contents = 100 - (headerHeight / window.innerHeight) * 100
     const bottom = contents - topHeight
