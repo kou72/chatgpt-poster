@@ -3,15 +3,7 @@ import { useChatGPT } from '../hooks/useChatGPT'
 
 export const PresentChats = () => {
   const [focusedTextarea, setFocusedTextarea] = useState<number | null>(null)
-  const { chats, addChat, removeChat } = useChatGPT()
-
-  const onFocusHandler = (index: number) => {
-    setFocusedTextarea(index)
-  }
-
-  const onBlurHandler = () => {
-    setFocusedTextarea(null)
-  }
+  const { chats, addChat, removeChat, updateChatContent } = useChatGPT()
 
   return (
     <div className="w-full h-full overflow-y-auto flex flex-col">
@@ -22,8 +14,9 @@ export const PresentChats = () => {
             className={`p-1 resize-none grow transition-all overflow-y-auto ${
               focusedTextarea === index ? 'h-[12rem]' : 'h-[2rem]'
             }  ${chat.role === 'user' ? 'bg-gray-300' : 'bg-gray-500'}`}
-            onFocus={() => onFocusHandler(index)}
-            onBlur={onBlurHandler}
+            onFocus={() => setFocusedTextarea(index)}
+            onBlur={() => setFocusedTextarea(null)}
+            onChange={(event) => updateChatContent(index, event.target.value)}
             placeholder={
               chat.role === 'user'
                 ? 'user（サンプルの質問）'

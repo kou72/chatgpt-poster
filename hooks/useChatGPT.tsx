@@ -58,18 +58,6 @@ export const useChatGPT = () => {
   const [system, setSystem] = useRecoilState(systemState)
   const [chats, setChats] = useRecoilState(chatsState)
 
-  const addChat = () => {
-    setChats([
-      ...chats,
-      { role: 'user', content: '' },
-      { role: 'assistant', content: '' },
-    ])
-  }
-
-  const removeChat = (index: number) => {
-    setChats(chats.filter((_, i) => i !== index))
-  }
-
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     try {
@@ -90,6 +78,9 @@ export const useChatGPT = () => {
     const URL = 'https://api.openai.com/v1/chat/completions'
     const messages = []
     if (system != '') messages.push({ role: 'system', content: system })
+    if (chats.length > 0) {
+      chats.forEach((chat) => messages.push(chat))
+    }
     messages.push({ role: 'user', content: input })
 
     setOutput('リクエスト中...')
@@ -168,6 +159,24 @@ export const useChatGPT = () => {
     setLocalStrage('history', newArr)
   }
 
+  const addChat = () => {
+    setChats([
+      ...chats,
+      { role: 'user', content: '' },
+      { role: 'assistant', content: '' },
+    ])
+  }
+
+  const removeChat = (index: number) => {
+    setChats(chats.filter((_, i) => i !== index))
+  }
+
+  const updateChatContent = (index: number, content: string) => {
+    const updatedChats = [...chats]
+    updatedChats[index] = { ...updatedChats[index], content }
+    setChats(updatedChats)
+  }
+
   return {
     system,
     input,
@@ -190,6 +199,7 @@ export const useChatGPT = () => {
     requestChatGPT,
     addChat,
     removeChat,
+    updateChatContent,
     handleChatgpt: {
       saveApikey,
       saveModel,
