@@ -4,10 +4,8 @@ import { useChatGPT } from '../hooks/useChatGPT'
 export const PresentChats = () => {
   const [focusedTextarea, setFocusedTextarea] = useState<number | null>(null)
   const [chats, setChats] = useState([
-    { role: 'user', content: '質問1' },
-    { role: 'assistant', content: '回答1.' },
-    { role: 'user', content: '質問2' },
-    { role: 'assistant', content: '回答2.' },
+    { role: 'user', content: '' },
+    { role: 'assistant', content: '' },
   ])
 
   const onFocusHandler = (index: number) => {
@@ -48,7 +46,10 @@ export const PresentChats = () => {
             }
           ></textarea>
           <div className="w-1/12">
-            <p className="cursor-pointer" onClick={() => removeChat(index)}>
+            <p
+              className="text-white p-1 cursor-pointer"
+              onClick={() => removeChat(index)}
+            >
               削除
             </p>
           </div>
