@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useLayout } from '@/hooks/useLayout'
 
 interface Props {
   hedaer: JSX.Element
@@ -10,25 +10,18 @@ interface Props {
 }
 
 export const Layout = (props: Props) => {
-  const headerHeight = 48
-  const barWidth = 4
-  const [topHeight, setTopHeight] = useState(0)
-  const [bottomHeight, setBottomHeight] = useState(0)
-  const [sidebarWidth, setSidebarWidth] = useState(0)
-  const [leftWidth, setLeftWidth] = useState(0)
-  const [rightWidth, setRightWidth] = useState(0)
-
-  /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    const height = window.innerHeight - (headerHeight + barWidth)
-    setTopHeight(height * 0.2)
-    setBottomHeight(height * 0.8)
-
-    const width = window.innerWidth - barWidth * 2
-    setSidebarWidth(width * 0.2)
-    setLeftWidth(width * 0.4)
-    setRightWidth(width * 0.4)
-  }, [])
+  const {
+    headerHeight,
+    barWidth,
+    topHeight,
+    bottomHeight,
+    sidebarWidth,
+    leftWidth,
+    rightWidth,
+    sidebarHandlerDown,
+    leftRightHandlerDown,
+    topBottomHandlerDown,
+  } = useLayout()
 
   const SidebarWidthHandleBar = () => {
     return (
@@ -40,54 +33,14 @@ export const Layout = (props: Props) => {
     )
   }
 
-  const sidebarHandlerDown = (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-    document.addEventListener('mousemove', handleSidebarWidth)
-    document.addEventListener('mouseup', sidebarHandlerUp)
-  }
-
-  const handleSidebarWidth = (e: { clientX: number }) => {
-    const sidebar = e.clientX
-    const contents = window.innerWidth - (sidebar + barWidth * 2)
-    const left = contents * (leftWidth / (leftWidth + rightWidth))
-    const right = contents * (rightWidth / (leftWidth + rightWidth))
-    setSidebarWidth(sidebar)
-    setLeftWidth(left)
-    setRightWidth(right)
-  }
-
-  const sidebarHandlerUp = () => {
-    document.removeEventListener('mousemove', handleSidebarWidth)
-    document.removeEventListener('mouseup', sidebarHandlerUp)
-  }
-
   const LeftRightWidthHandleBar = () => {
     return (
       <div
         className="bg-gray-500 cursor-col-resize z-2"
         style={{ width: `${barWidth}px` }}
-        onMouseDown={LeftRightHandlerDown}
+        onMouseDown={leftRightHandlerDown}
       ></div>
     )
-  }
-
-  const LeftRightHandlerDown = (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-    document.addEventListener('mousemove', handleleftWidth)
-    document.addEventListener('mouseup', LeftRightHandlerUp)
-  }
-
-  const handleleftWidth = (e: { clientX: number }) => {
-    const contents = window.innerWidth - (sidebarWidth + barWidth * 2)
-    const right = window.innerWidth - (e.clientX + barWidth)
-    const left = contents - right
-    setLeftWidth(left)
-    setRightWidth(right)
-  }
-
-  const LeftRightHandlerUp = () => {
-    document.removeEventListener('mousemove', handleleftWidth)
-    document.removeEventListener('mouseup', LeftRightHandlerUp)
   }
 
   const TopBottomHeightHandleBar = () => {
@@ -95,27 +48,9 @@ export const Layout = (props: Props) => {
       <div
         className="bg-gray-500 cursor-row-resize z-2"
         style={{ height: `${barWidth}px` }}
-        onMouseDown={TopBottomHandlerDown}
+        onMouseDown={topBottomHandlerDown}
       ></div>
     )
-  }
-
-  const TopBottomHandlerDown = (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-    document.addEventListener('mousemove', handleTopBottomHeight)
-    document.addEventListener('mouseup', TopBottomHandlerUp)
-  }
-
-  const handleTopBottomHeight = (e: { clientY: number }) => {
-    const top = e.clientY - (headerHeight + barWidth)
-    const bottom = window.innerHeight - e.clientY
-    setTopHeight(top)
-    setBottomHeight(bottom)
-  }
-
-  const TopBottomHandlerUp = () => {
-    document.removeEventListener('mousemove', handleTopBottomHeight)
-    document.removeEventListener('mouseup', TopBottomHandlerUp)
   }
 
   return (
