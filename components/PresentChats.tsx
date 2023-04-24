@@ -15,12 +15,14 @@ export const PresentChats = () => {
   return (
     <>
       <div className="w-full h-full overflow-y-auto flex flex-col">
-        <div className={`flex p-1 ${isFocused ? 'h-[12rem]' : 'h-[3rem]'}`}>
+        <div className={`flex p-1`}>
           <div className="w-1/12">
             <p>user</p>
           </div>
           <textarea
-            className={`bg-gray-300 p-1 resize-none grow transition-all`}
+            className={`bg-gray-300 p-1 resize-none grow transition-all overflow-y-auto ${
+              isFocused ? 'h-[12rem]' : 'h-[3rem]'
+            }`}
             onFocus={onFocusHandler}
             onBlur={onBlurHandler}
             placeholder="ここにテキストを入力してください..."
@@ -29,12 +31,14 @@ export const PresentChats = () => {
             <p>削除</p>
           </div>
         </div>
-        <div className={`flex p-1 ${isFocused ? 'h-[12rem]' : 'h-[3rem]'}`}>
+        <div className={`flex p-1`}>
           <div className="w-1/12">
             <p>assistant</p>
           </div>
           <textarea
-            className={`bg-gray-300 p-1 resize-none grow transition-all`}
+            className={`bg-gray-300 p-1 resize-none grow transition-all overflow-y-auto ${
+              isFocused ? 'h-[12rem]' : 'h-[3rem]'
+            }`}
             onFocus={onFocusHandler}
             onBlur={onBlurHandler}
             placeholder="ここにテキストを入力してください..."
