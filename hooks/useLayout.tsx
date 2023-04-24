@@ -1,5 +1,24 @@
 import { useState, useEffect } from 'react'
 
+const getSessionStrage = (key: string, init: any) => {
+  if (typeof window === 'undefined') return
+  try {
+    const item = window.sessionStorage.getItem(key)
+    return item ? JSON.parse(item) : init
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const setSessionStrage = (key: string, value: any) => {
+  if (typeof window === 'undefined') console.error('window undefined')
+  try {
+    window.sessionStorage.setItem(key, JSON.stringify(value))
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export const useLayout = () => {
   const headerHeight = 48
   const barWidth = 4
@@ -34,6 +53,9 @@ export const useLayout = () => {
     setSidebarWidth(sidebar)
     setLeftWidth(left)
     setRightWidth(right)
+    setSessionStrage('sidebarWidth', sidebar)
+    setSessionStrage('leftWidth', left)
+    setSessionStrage('rightWidth', right)
   }
 
   const sidebarHandlerUp = () => {
@@ -53,6 +75,8 @@ export const useLayout = () => {
     const left = contents - right
     setLeftWidth(left)
     setRightWidth(right)
+    setSessionStrage('leftWidth', left)
+    setSessionStrage('rightWidth', right)
   }
 
   const leftRightHandlerUp = () => {
@@ -71,6 +95,8 @@ export const useLayout = () => {
     const bottom = window.innerHeight - e.clientY
     setTopHeight(top)
     setBottomHeight(bottom)
+    setSessionStrage('topHeight', top)
+    setSessionStrage('bottomHeight', bottom)
   }
 
   const topBottomHandlerUp = () => {
