@@ -33,20 +33,21 @@ const initHistory = [
     chats: initChats,
   },
 ]
-export const apikeyState = atom({ key: 'apikey', default: '' })
-export const modelState = atom({ key: 'model', default: 'gpt-3.5-turbo' })
-export const temperatureState = atom({ key: 'temperature', default: 0.9 })
-export const maxTokensState = atom({ key: 'maxTokens', default: 200 })
-export const maxTokenCheckState = atom({ key: 'maxTokenCheck', default: true })
-export const inputState = atom({ key: 'input', default: 'こんにちは！' })
-export const outputState = atom({ key: 'output', default: '' })
-export const totalTokensState = atom({ key: 'totalTokens', default: 0 })
-export const systemState = atom({ key: 'system', default: '' })
+const apikeyState = atom({ key: 'apikey', default: '' })
+const modelState = atom({ key: 'model', default: 'gpt-3.5-turbo' })
+const temperatureState = atom({ key: 'temperature', default: 0.9 })
+const maxTokensState = atom({ key: 'maxTokens', default: 200 })
+const chatModeState = atom({ key: 'chatMode', default: true })
+const maxTokenCheckState = atom({ key: 'maxTokenCheck', default: true })
+const inputState = atom({ key: 'input', default: 'こんにちは！' })
+const outputState = atom({ key: 'output', default: '' })
+const totalTokensState = atom({ key: 'totalTokens', default: 0 })
+const systemState = atom({ key: 'system', default: '' })
 const chatsState = atom({
   key: 'chatsState',
   default: initChats,
 })
-export const historyState = atom({
+const historyState = atom({
   key: 'historyState',
   default: initHistory,
 })
@@ -56,6 +57,7 @@ export const useChatGPT = () => {
   const [model, setModel] = useRecoilState(modelState)
   const [temperature, setTemperature] = useRecoilState(temperatureState)
   const [maxTokens, setMaxTokens] = useRecoilState(maxTokensState)
+  const [chatMode, setChatMode] = useRecoilState(chatModeState)
   const [maxTokenCheck, setMaxTokenCheck] = useRecoilState(maxTokenCheckState)
   const [input, setInput] = useRecoilState(inputState)
   const [output, setOutput] = useRecoilState(outputState)
@@ -107,8 +109,10 @@ export const useChatGPT = () => {
         }
       )
       saveTotalTokens(response.data.usage.total_tokens)
-      setOutput(response.data.choices[0].message.content)
-      saveHistory(response.data.choices[0].message.content)
+      const res = response.data.choices[0].message.content
+      setOutput(res)
+      saveHistory(res)
+      if (chatMode) pushChat(input, res)
     } catch (error: any) {
       if (error.message) {
         console.error(error.message)
@@ -184,6 +188,14 @@ export const useChatGPT = () => {
     const updatedChats = [...chats]
     updatedChats[index] = { ...updatedChats[index], content }
     setChats(updatedChats)
+  }
+
+  const pushChat = (user: string, assistant: string) => {
+    setChats([
+      ...chats,
+      { role: 'user', content: user },
+      { role: 'assistant', content: assistant },
+    ])
   }
 
   return {
