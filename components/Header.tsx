@@ -8,10 +8,12 @@ const Header = () => {
     temperature,
     maxTokenCheck,
     maxTokens,
+    chatMode,
     saveApikey,
     saveModel,
     saveTemperature,
     toggleMaxTokenCheck,
+    toggleChatMode,
     saveMaxTokens,
     requestChatGPT,
   } = useChatGPT()
@@ -23,6 +25,7 @@ const Header = () => {
         <Model />
         <Temperature />
         <MaxTokens />
+        <ChatMode />
         <SendButton />
       </div>
     )
@@ -112,6 +115,21 @@ const Header = () => {
         >
           Send
         </button>
+      </>
+    )
+  }
+
+  const ChatMode = () => {
+    return (
+      <>
+        <input
+          className="ml-2"
+          type="checkbox"
+          id="check"
+          checked={chatMode}
+          onChange={() => toggleChatMode()}
+        />
+        <span className="mx-1 text-white">Chat Mode</span>
       </>
     )
   }

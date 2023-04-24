@@ -37,7 +37,7 @@ const apikeyState = atom({ key: 'apikey', default: '' })
 const modelState = atom({ key: 'model', default: 'gpt-3.5-turbo' })
 const temperatureState = atom({ key: 'temperature', default: 0.9 })
 const maxTokensState = atom({ key: 'maxTokens', default: 200 })
-const chatModeState = atom({ key: 'chatMode', default: true })
+const chatModeState = atom({ key: 'chatMode', default: false })
 const maxTokenCheckState = atom({ key: 'maxTokenCheck', default: true })
 const inputState = atom({ key: 'input', default: 'こんにちは！' })
 const outputState = atom({ key: 'output', default: '' })
@@ -57,8 +57,8 @@ export const useChatGPT = () => {
   const [model, setModel] = useRecoilState(modelState)
   const [temperature, setTemperature] = useRecoilState(temperatureState)
   const [maxTokens, setMaxTokens] = useRecoilState(maxTokensState)
-  const [chatMode, setChatMode] = useRecoilState(chatModeState)
   const [maxTokenCheck, setMaxTokenCheck] = useRecoilState(maxTokenCheckState)
+  const [chatMode, setChatMode] = useRecoilState(chatModeState)
   const [input, setInput] = useRecoilState(inputState)
   const [output, setOutput] = useRecoilState(outputState)
   const [totalTokens, setTotalTokens] = useRecoilState(totalTokensState)
@@ -75,6 +75,7 @@ export const useChatGPT = () => {
       setMaxTokens(getLocalStrage('maxTokens', 200))
       setTotalTokens(getLocalStrage('totalTokens', 0))
       setMaxTokenCheck(getLocalStrage('totalTokenCheck', true))
+      setChatMode(getLocalStrage('chatMode', false))
       setHistory(getLocalStrage('history', initHistory))
       setSystem(getLocalStrage('system', ''))
     } catch (error) {
@@ -152,6 +153,11 @@ export const useChatGPT = () => {
     setLocalStrage('totalTokenCheck', !maxTokenCheck)
   }
 
+  const toggleChatMode = () => {
+    setChatMode(!chatMode)
+    setLocalStrage('chatMode', !chatMode)
+  }
+
   const saveTotalTokens = (value: number) => {
     const sum = totalTokens + value
     setTotalTokens(sum)
@@ -204,6 +210,7 @@ export const useChatGPT = () => {
     temperature,
     maxTokenCheck,
     maxTokens,
+    chatMode,
     system,
     input,
     output,
@@ -214,6 +221,7 @@ export const useChatGPT = () => {
     saveModel,
     saveTemperature,
     toggleMaxTokenCheck,
+    toggleChatMode,
     saveMaxTokens,
     setSystem,
     setInput,
