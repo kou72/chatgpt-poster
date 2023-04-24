@@ -3,10 +3,7 @@ import { useChatGPT } from '../hooks/useChatGPT'
 
 export const PresentChats = () => {
   const [focusedTextarea, setFocusedTextarea] = useState<number | null>(null)
-  const [chats, setChats] = useState([
-    { role: 'user', content: '' },
-    { role: 'assistant', content: '' },
-  ])
+  const { chats, addChat, removeChat } = useChatGPT()
 
   const onFocusHandler = (index: number) => {
     setFocusedTextarea(index)
@@ -16,18 +13,6 @@ export const PresentChats = () => {
     setFocusedTextarea(null)
   }
 
-  const addChat = () => {
-    setChats([
-      ...chats,
-      { role: 'user', content: '' },
-      { role: 'assistant', content: '' },
-    ])
-  }
-
-  const removeChat = (index: number) => {
-    setChats(chats.filter((_, i) => i !== index))
-  }
-
   return (
     <div className="w-full h-full overflow-y-auto flex flex-col">
       {chats.map((chat, index) => (
@@ -35,7 +20,7 @@ export const PresentChats = () => {
           <textarea
             value={chat.content}
             className={`p-1 resize-none grow transition-all overflow-y-auto ${
-              focusedTextarea === index ? 'h-[12rem]' : 'h-[3rem]'
+              focusedTextarea === index ? 'h-[12rem]' : 'h-[2rem]'
             }  ${chat.role === 'user' ? 'bg-gray-300' : 'bg-gray-500'}`}
             onFocus={() => onFocusHandler(index)}
             onBlur={onBlurHandler}

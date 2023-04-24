@@ -37,6 +37,13 @@ export const historyState = atom({
   default: initHistory,
 })
 export const systemState = atom({ key: 'system', default: '' })
+const chatsState = atom({
+  key: 'chatsState',
+  default: [
+    { role: 'user', content: '' },
+    { role: 'assistant', content: '' },
+  ],
+})
 
 export const useChatGPT = () => {
   const [apikey, setApikey] = useRecoilState(apikeyState)
@@ -49,6 +56,19 @@ export const useChatGPT = () => {
   const [totalTokens, setTotalTokens] = useRecoilState(totalTokensState)
   const [history, setHistory] = useRecoilState(historyState)
   const [system, setSystem] = useRecoilState(systemState)
+  const [chats, setChats] = useRecoilState(chatsState)
+
+  const addChat = () => {
+    setChats([
+      ...chats,
+      { role: 'user', content: '' },
+      { role: 'assistant', content: '' },
+    ])
+  }
+
+  const removeChat = (index: number) => {
+    setChats(chats.filter((_, i) => i !== index))
+  }
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -152,6 +172,7 @@ export const useChatGPT = () => {
     system,
     input,
     output,
+    chats,
     chatgpt: {
       apikey,
       model,
@@ -167,6 +188,8 @@ export const useChatGPT = () => {
     setSystem,
     setInput,
     requestChatGPT,
+    addChat,
+    removeChat,
     handleChatgpt: {
       saveApikey,
       saveModel,
