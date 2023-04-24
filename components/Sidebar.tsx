@@ -1,12 +1,14 @@
 import { useChatGPT } from '../hooks/useChatGPT'
 
 const Sidebar = () => {
-  const { chatgpt, handleChatgpt } = useChatGPT()
+  const { chatgpt, handleChatgpt, setSystem, setChats } = useChatGPT()
   const usedYen = chatgpt.totalTokens * (0.002 / 1000) * 150
 
   const handleClick = (index: number) => {
     handleChatgpt.setInput(chatgpt.history[index].input)
     handleChatgpt.setOutput(chatgpt.history[index].output)
+    setSystem(chatgpt.history[index].system)
+    setChats(chatgpt.history[index].chats)
     console.log(chatgpt.history[index].input, chatgpt.history[index].output)
   }
 

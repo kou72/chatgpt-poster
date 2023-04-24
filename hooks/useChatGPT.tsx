@@ -21,8 +21,17 @@ const setLocalStrage = (key: string, value: any) => {
   }
 }
 
+const initChats = [
+  { role: 'user', content: '' },
+  { role: 'assistant', content: '' },
+]
 const initHistory = [
-  { input: 'History', output: '最新30個までヒストリが表示されます' },
+  {
+    input: 'History',
+    output: '最新30個までヒストリが表示されます',
+    system: '',
+    chats: initChats,
+  },
 ]
 export const apikeyState = atom({ key: 'apikey', default: '' })
 export const modelState = atom({ key: 'model', default: 'gpt-3.5-turbo' })
@@ -32,17 +41,14 @@ export const maxTokenCheckState = atom({ key: 'maxTokenCheck', default: true })
 export const inputState = atom({ key: 'input', default: 'こんにちは！' })
 export const outputState = atom({ key: 'output', default: '' })
 export const totalTokensState = atom({ key: 'totalTokens', default: 0 })
-export const historyState = atom({
-  key: 'historyState',
-  default: initHistory,
-})
 export const systemState = atom({ key: 'system', default: '' })
 const chatsState = atom({
   key: 'chatsState',
-  default: [
-    { role: 'user', content: '' },
-    { role: 'assistant', content: '' },
-  ],
+  default: initChats,
+})
+export const historyState = atom({
+  key: 'historyState',
+  default: initHistory,
 })
 
 export const useChatGPT = () => {
@@ -154,7 +160,10 @@ export const useChatGPT = () => {
   }
 
   const saveHistory = (value: any) => {
-    const newArr = [...history, { input: input, output: value }].splice(-30)
+    const newArr = [
+      ...history,
+      { input: input, output: value, system: system, chats: chats },
+    ].splice(-30)
     setHistory(newArr)
     setLocalStrage('history', newArr)
   }
@@ -196,6 +205,7 @@ export const useChatGPT = () => {
     },
     setSystem,
     setInput,
+    setChats,
     requestChatGPT,
     addChat,
     removeChat,
