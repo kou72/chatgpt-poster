@@ -21,18 +21,33 @@ const setLocalStrage = (key: string, value: any) => {
   }
 }
 
-const initHistory = [
-  { input: 'History', output: '最新30個までヒストリが表示されます' },
+const initChats = [
+  { role: 'user', content: '' },
+  { role: 'assistant', content: '' },
 ]
-export const apikeyState = atom({ key: 'apikey', default: '' })
-export const modelState = atom({ key: 'model', default: 'gpt-3.5-turbo' })
-export const temperatureState = atom({ key: 'temperature', default: 0.9 })
-export const maxTokensState = atom({ key: 'maxTokens', default: 200 })
-export const maxTokenCheckState = atom({ key: 'maxTokenCheck', default: true })
-export const inputState = atom({ key: 'input', default: 'こんにちは！' })
-export const outputState = atom({ key: 'output', default: '' })
-export const totalTokensState = atom({ key: 'totalTokens', default: 0 })
-export const historyState = atom({
+const initHistory = [
+  {
+    input: 'History',
+    output: '最新30個までヒストリが表示されます',
+    system: '',
+    chats: initChats,
+  },
+]
+const apikeyState = atom({ key: 'apikey', default: '' })
+const modelState = atom({ key: 'model', default: 'gpt-3.5-turbo' })
+const temperatureState = atom({ key: 'temperature', default: 0.9 })
+const maxTokensState = atom({ key: 'maxTokens', default: 200 })
+const chatModeState = atom({ key: 'chatMode', default: false })
+const maxTokenCheckState = atom({ key: 'maxTokenCheck', default: true })
+const inputState = atom({ key: 'input', default: 'こんにちは！' })
+const outputState = atom({ key: 'output', default: '' })
+const totalTokensState = atom({ key: 'totalTokens', default: 0 })
+const systemState = atom({ key: 'system', default: '' })
+const chatsState = atom({
+  key: 'chatsState',
+  default: initChats,
+})
+const historyState = atom({
   key: 'historyState',
   default: initHistory,
 })
@@ -43,11 +58,15 @@ export const useChatGPT = () => {
   const [temperature, setTemperature] = useRecoilState(temperatureState)
   const [maxTokens, setMaxTokens] = useRecoilState(maxTokensState)
   const [maxTokenCheck, setMaxTokenCheck] = useRecoilState(maxTokenCheckState)
+  const [chatMode, setChatMode] = useRecoilState(chatModeState)
   const [input, setInput] = useRecoilState(inputState)
   const [output, setOutput] = useRecoilState(outputState)
   const [totalTokens, setTotalTokens] = useRecoilState(totalTokensState)
   const [history, setHistory] = useRecoilState(historyState)
+  const [system, setSystem] = useRecoilState(systemState)
+  const [chats, setChats] = useRecoilState(chatsState)
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     try {
       setApikey(getLocalStrage('apikey', ''))
@@ -56,7 +75,9 @@ export const useChatGPT = () => {
       setMaxTokens(getLocalStrage('maxTokens', 200))
       setTotalTokens(getLocalStrage('totalTokens', 0))
       setMaxTokenCheck(getLocalStrage('totalTokenCheck', true))
+      setChatMode(getLocalStrage('chatMode', false))
       setHistory(getLocalStrage('history', initHistory))
+      setSystem(getLocalStrage('system', ''))
     } catch (error) {
       console.log(error)
     }
@@ -64,13 +85,20 @@ export const useChatGPT = () => {
 
   const requestChatGPT = async () => {
     const URL = 'https://api.openai.com/v1/chat/completions'
+    const messages = []
+    if (system != '') messages.push({ role: 'system', content: system })
+    if (chats.length > 0) {
+      chats.forEach((chat) => messages.push(chat))
+    }
+    messages.push({ role: 'user', content: input })
+
     setOutput('リクエスト中...')
     try {
       const response = await axios.post(
         URL,
         {
           model: model,
-          messages: [{ role: 'user', content: input }],
+          messages: messages,
           temperature: temperature,
           max_tokens: maxTokenCheck ? maxTokens : null,
         },
@@ -82,14 +110,21 @@ export const useChatGPT = () => {
         }
       )
       saveTotalTokens(response.data.usage.total_tokens)
-      setOutput(response.data.choices[0].message.content)
-      saveHistory(response.data.choices[0].message.content)
+      const res = response.data.choices[0].message.content
+      setOutput(res)
+      saveHistory(res)
+      if (chatMode) pushChat(input, res)
     } catch (error: any) {
-      console.log(error.response.data.error.message)
-      setOutput(
-        'リクエストが失敗しました。\n\nerror: ' +
-          error.response.data.error.message
-      )
+      if (error.message) {
+        console.error(error.message)
+        setOutput('リクエストが失敗しました。\n\nerror: ' + error.message)
+      } else if (error.response.data) {
+        console.error(error.response.data.error.message)
+        setOutput(
+          'リクエストが失敗しました。\n\nerror: ' +
+            error.response.data.error.message
+        )
+      }
     }
   }
 
@@ -118,6 +153,11 @@ export const useChatGPT = () => {
     setLocalStrage('totalTokenCheck', !maxTokenCheck)
   }
 
+  const toggleChatMode = () => {
+    setChatMode(!chatMode)
+    setLocalStrage('chatMode', !chatMode)
+  }
+
   const saveTotalTokens = (value: number) => {
     const sum = totalTokens + value
     setTotalTokens(sum)
@@ -130,34 +170,67 @@ export const useChatGPT = () => {
   }
 
   const saveHistory = (value: any) => {
-    const newArr = [...history, { input: input, output: value }].splice(-30)
+    const newArr = [
+      ...history,
+      { input: input, output: value, system: system, chats: chats },
+    ].splice(-30)
     setHistory(newArr)
     setLocalStrage('history', newArr)
   }
 
+  const addChat = () => {
+    setChats([
+      ...chats,
+      { role: 'user', content: '' },
+      { role: 'assistant', content: '' },
+    ])
+  }
+
+  const removeChat = (index: number) => {
+    setChats(chats.filter((_, i) => i !== index))
+  }
+
+  const updateChatContent = (index: number, content: string) => {
+    const updatedChats = [...chats]
+    updatedChats[index] = { ...updatedChats[index], content }
+    setChats(updatedChats)
+  }
+
+  const pushChat = (user: string, assistant: string) => {
+    setChats([
+      ...chats,
+      { role: 'user', content: user },
+      { role: 'assistant', content: assistant },
+    ])
+  }
+
   return {
-    chatgpt: {
-      apikey,
-      model,
-      temperature,
-      maxTokens,
-      input,
-      output,
-      totalTokens,
-      maxTokenCheck,
-      history,
-    },
-    handleChatgpt: {
-      saveApikey,
-      saveModel,
-      saveTemperature,
-      saveMaxTokens,
-      toggleMaxTokenCheck,
-      resetTotalTokens,
-      setInput,
-      setOutput,
-      requestChatGPT,
-      saveHistory,
-    },
+    apikey,
+    model,
+    temperature,
+    maxTokenCheck,
+    maxTokens,
+    chatMode,
+    system,
+    input,
+    output,
+    chats,
+    totalTokens,
+    history,
+    saveApikey,
+    saveModel,
+    saveTemperature,
+    toggleMaxTokenCheck,
+    toggleChatMode,
+    saveMaxTokens,
+    setSystem,
+    setInput,
+    setOutput,
+    setChats,
+    addChat,
+    removeChat,
+    updateChatContent,
+    resetTotalTokens,
+    requestChatGPT,
   }
 }

@@ -2,18 +2,31 @@ import { useChatGPT } from '../hooks/useChatGPT'
 
 const Header = () => {
   const models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301']
-  const { chatgpt, handleChatgpt } = useChatGPT()
+  const {
+    apikey,
+    model,
+    temperature,
+    maxTokenCheck,
+    maxTokens,
+    chatMode,
+    saveApikey,
+    saveModel,
+    saveTemperature,
+    toggleMaxTokenCheck,
+    toggleChatMode,
+    saveMaxTokens,
+    requestChatGPT,
+  } = useChatGPT()
 
   const main = () => {
     return (
-      <div className="fixed top-0 left-0 w-full h-12 bg-gray-800 z-10">
-        <div className="flex items-center h-12 gap-1">
-          <ApiKey />
-          <Model />
-          <Temperature />
-          <MaxTokens />
-          <SendButton />
-        </div>
+      <div className="h-full flex items-center gap-1 bg-gray-800">
+        <ApiKey />
+        <Model />
+        <Temperature />
+        <MaxTokens />
+        <ChatMode />
+        <SendButton />
       </div>
     )
   }
@@ -24,8 +37,8 @@ const Header = () => {
         <span className="mx-1 text-white">API Key</span>
         <input
           className="w-1/8 pl-1"
-          value={chatgpt.apikey}
-          onChange={(e) => handleChatgpt.saveApikey(e.target.value)}
+          value={apikey}
+          onChange={(e) => saveApikey(e.target.value)}
         ></input>
       </>
     )
@@ -37,8 +50,8 @@ const Header = () => {
         <span className="mx-1 text-white">Model</span>
         <select
           className="w-1/8 pl-1"
-          value={chatgpt.model}
-          onChange={(e) => handleChatgpt.saveModel(e.target.value)}
+          value={model}
+          onChange={(e) => saveModel(e.target.value)}
         >
           {models.map((model) => (
             <option key={model} value={model}>
@@ -60,10 +73,8 @@ const Header = () => {
           step="0.1"
           min="0"
           max="1"
-          value={chatgpt.temperature}
-          onChange={(e) =>
-            handleChatgpt.saveTemperature(Number(e.target.value))
-          }
+          value={temperature}
+          onChange={(e) => saveTemperature(Number(e.target.value))}
         ></input>
       </>
     )
@@ -76,20 +87,20 @@ const Header = () => {
           className="ml-2"
           type="checkbox"
           id="check"
-          checked={chatgpt.maxTokenCheck}
-          onChange={() => handleChatgpt.toggleMaxTokenCheck()}
+          checked={maxTokenCheck}
+          onChange={() => toggleMaxTokenCheck()}
         />
 
         <span className="mx-1 text-white">Max Tokens</span>
         <input
           className="w-1/12 pl-1"
-          disabled={!chatgpt.maxTokenCheck}
+          disabled={!maxTokenCheck}
           type="number"
           step="100"
           min="100"
           max="3000"
-          value={chatgpt.maxTokens}
-          onChange={(e) => handleChatgpt.saveMaxTokens(Number(e.target.value))}
+          value={maxTokens}
+          onChange={(e) => saveMaxTokens(Number(e.target.value))}
         ></input>
       </>
     )
@@ -100,10 +111,25 @@ const Header = () => {
       <>
         <button
           className="ml-auto mr-2 px-2 bg-transparent border border-white rounded text-white"
-          onClick={handleChatgpt.requestChatGPT}
+          onClick={requestChatGPT}
         >
           Send
         </button>
+      </>
+    )
+  }
+
+  const ChatMode = () => {
+    return (
+      <>
+        <input
+          className="ml-2"
+          type="checkbox"
+          id="check"
+          checked={chatMode}
+          onChange={() => toggleChatMode()}
+        />
+        <span className="mx-1 text-white">Chat Mode</span>
       </>
     )
   }
