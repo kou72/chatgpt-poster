@@ -12,7 +12,7 @@ export const SystemTextArea = () => {
 
   return (
     <textarea
-      className="bg-gray-300 w-full h-full overflow-y-auto p-1"
+      className="bg-gray-300 w-full h-full overflow-y-auto p-1 resize-none"
       placeholder="System（AIの振る舞いを指示）"
       value={system}
       onChange={(e) => setSystem(e.target.value)}
