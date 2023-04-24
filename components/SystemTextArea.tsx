@@ -5,7 +5,6 @@ export const SystemTextArea = () => {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
-      console.log('key down cmd + Enter')
       requestChatGPT()
     }
   }
