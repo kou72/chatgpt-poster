@@ -191,6 +191,8 @@ export const useChatGPT = () => {
     input,
     output,
     chats,
+    totalTokens,
+    history,
     chatgpt: {
       apikey,
       model,
@@ -205,11 +207,13 @@ export const useChatGPT = () => {
     },
     setSystem,
     setInput,
+    setOutput,
     setChats,
-    requestChatGPT,
     addChat,
     removeChat,
     updateChatContent,
+    resetTotalTokens,
+    requestChatGPT,
     handleChatgpt: {
       saveApikey,
       saveModel,
