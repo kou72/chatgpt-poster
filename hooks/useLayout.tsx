@@ -29,14 +29,17 @@ export const useLayout = () => {
   const [rightWidth, setRightWidth] = useState(0)
 
   useEffect(() => {
-    const height = window.innerHeight - (headerHeight + barWidth)
-    setTopHeight(height * 0.2)
-    setBottomHeight(height * 0.8)
-
-    const width = window.innerWidth - barWidth * 2
-    setSidebarWidth(width * 0.2)
-    setLeftWidth(width * 0.4)
-    setRightWidth(width * 0.4)
+    try {
+      const height = window.innerHeight - (headerHeight + barWidth)
+      const width = window.innerWidth - barWidth * 2
+      setTopHeight(getSessionStrage('topHeight', height * 0.2))
+      setBottomHeight(getSessionStrage('bottomHeight', height * 0.8))
+      setSidebarWidth(getSessionStrage('sidebarWidth', width * 0.2))
+      setLeftWidth(getSessionStrage('leftWidth', width * 0.4))
+      setRightWidth(getSessionStrage('rightWidth', width * 0.4))
+    } catch (error) {
+      console.log(error)
+    }
   }, [])
 
   const sidebarHandlerDown = (e: { preventDefault: () => void }) => {
