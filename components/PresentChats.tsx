@@ -21,29 +21,36 @@ export const PresentChats = () => {
   const addChat = () => {
     setChats([
       ...chats,
-      { role: 'user', content: '新しい質問' },
-      { role: 'assistant', content: '新しい回答' },
+      { role: 'user', content: '' },
+      { role: 'assistant', content: '' },
     ])
+  }
+
+  const removeChat = (index: number) => {
+    setChats(chats.filter((_, i) => i !== index))
   }
 
   return (
     <div className="w-full h-full overflow-y-auto flex flex-col">
       {chats.map((chat, index) => (
         <div key={index} className={`flex p-1`}>
-          <div className="w-1/12">
-            <p>{chat.role}</p>
-          </div>
           <textarea
             value={chat.content}
-            className={`bg-gray-300 p-1 resize-none grow transition-all overflow-y-auto ${
+            className={`p-1 resize-none grow transition-all overflow-y-auto ${
               focusedTextarea === index ? 'h-[12rem]' : 'h-[3rem]'
-            }`}
+            }  ${chat.role === 'user' ? 'bg-gray-300' : 'bg-gray-500'}`}
             onFocus={() => onFocusHandler(index)}
             onBlur={onBlurHandler}
-            placeholder="ここにテキストを入力してください..."
+            placeholder={
+              chat.role === 'user'
+                ? 'user（サンプルの質問）'
+                : 'assistant（期待する回答）'
+            }
           ></textarea>
           <div className="w-1/12">
-            <p>削除</p>
+            <p className="cursor-pointer" onClick={() => removeChat(index)}>
+              削除
+            </p>
           </div>
         </div>
       ))}
