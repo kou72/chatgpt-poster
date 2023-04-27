@@ -21,12 +21,14 @@ const Header = () => {
   const main = () => {
     return (
       <div className="h-full flex items-center gap-1 bg-gray-800">
-        <ApiKey />
-        <Model />
-        <Temperature />
-        <MaxTokens />
-        <ChatMode />
-        <SendButton />
+        <div className="hidden sm:inline-block">
+          <ApiKey />
+          <Model />
+          <Temperature />
+          <MaxTokens />
+          <ChatMode />
+          <SendButton />
+        </div>
       </div>
     )
   }
