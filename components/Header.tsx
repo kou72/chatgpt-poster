@@ -1,7 +1,7 @@
 import { useChatGPT } from '../hooks/useChatGPT'
 
 const Header = () => {
-  const models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301']
+  const models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301', 'gpt-4']
   const {
     apikey,
     model,
