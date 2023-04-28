@@ -42,6 +42,7 @@ const maxTokenCheckState = atom({ key: 'maxTokenCheck', default: true })
 const inputState = atom({ key: 'input', default: 'こんにちは！' })
 const outputState = atom({ key: 'output', default: '' })
 const totalTokensState = atom({ key: 'totalTokens', default: 0 })
+const totalUsedYenState = atom({ key: 'totalUsedYen', default: 0 })
 const systemState = atom({ key: 'system', default: '' })
 const chatsState = atom({
   key: 'chatsState',
@@ -61,7 +62,7 @@ export const useChatGPT = () => {
   const [chatMode, setChatMode] = useRecoilState(chatModeState)
   const [input, setInput] = useRecoilState(inputState)
   const [output, setOutput] = useRecoilState(outputState)
-  const [totalTokens, setTotalTokens] = useRecoilState(totalTokensState)
+  const [totalUsedYen, setTotalUsedYen] = useRecoilState(totalUsedYenState)
   const [history, setHistory] = useRecoilState(historyState)
   const [system, setSystem] = useRecoilState(systemState)
   const [chats, setChats] = useRecoilState(chatsState)
@@ -73,7 +74,6 @@ export const useChatGPT = () => {
       setModel(getLocalStrage('model', 'gpt-3.5-turbo'))
       setTemperature(getLocalStrage('temperature', 0.9))
       setMaxTokens(getLocalStrage('maxTokens', 200))
-      setTotalTokens(getLocalStrage('totalTokens', 0))
       setMaxTokenCheck(getLocalStrage('totalTokenCheck', true))
       setChatMode(getLocalStrage('chatMode', false))
       setHistory(getLocalStrage('history', initHistory))
@@ -109,10 +109,11 @@ export const useChatGPT = () => {
           },
         }
       )
-      saveTotalTokens(response.data.usage.total_tokens)
 
-      console.log(response.data.usage.prompt_tokens)
-      console.log(response.data.usage.completion_tokens)
+      const promptTokens = response.data.usage.prompt_tokens
+      const completionTokens = response.data.usage.completion_tokens
+      const usedYen = calcUsedYen(promptTokens, completionTokens)
+      saveTotalUsedYen(usedYen)
 
       const res = response.data.choices[0].message.content
       setOutput(res)
@@ -130,6 +131,17 @@ export const useChatGPT = () => {
         )
       }
     }
+  }
+
+  const calcUsedYen = (promptTokens: number, completionTokens: number) => {
+    const promptPricing = 0.002 / 1000
+    const completionPricing = 0.002 / 1000
+    const dollarToYenRate = 150
+
+    const promptYen = promptTokens * promptPricing * dollarToYenRate
+    const completionYen = completionTokens * completionPricing * dollarToYenRate
+    const totalYen = promptYen + completionYen
+    return totalYen
   }
 
   const saveApikey = (value: string) => {
@@ -162,15 +174,15 @@ export const useChatGPT = () => {
     setLocalStrage('chatMode', !chatMode)
   }
 
-  const saveTotalTokens = (value: number) => {
-    const sum = totalTokens + value
-    setTotalTokens(sum)
-    setLocalStrage('totalTokens', sum)
+  const saveTotalUsedYen = (value: number) => {
+    const sum = totalUsedYen + value
+    setTotalUsedYen(sum)
+    setLocalStrage('totalUsedYen', sum)
   }
 
-  const resetTotalTokens = () => {
-    setTotalTokens(0)
-    setLocalStrage('totalTokens', 0)
+  const resetTotalUsedYen = () => {
+    setTotalUsedYen(0)
+    setLocalStrage('totalUsedYen', 0)
   }
 
   const saveHistory = (value: any) => {
@@ -219,7 +231,7 @@ export const useChatGPT = () => {
     input,
     output,
     chats,
-    totalTokens,
+    totalUsedYen,
     history,
     saveApikey,
     saveModel,
@@ -234,7 +246,7 @@ export const useChatGPT = () => {
     addChat,
     removeChat,
     updateChatContent,
-    resetTotalTokens,
+    resetTotalUsedYen,
     requestChatGPT,
   }
 }
