@@ -110,6 +110,10 @@ export const useChatGPT = () => {
         }
       )
       saveTotalTokens(response.data.usage.total_tokens)
+
+      console.log(response.data.usage.prompt_tokens)
+      console.log(response.data.usage.completion_tokens)
+
       const res = response.data.choices[0].message.content
       setOutput(res)
       saveHistory(res)
