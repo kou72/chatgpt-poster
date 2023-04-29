@@ -99,7 +99,7 @@ const Header = () => {
           type="number"
           step="100"
           min="100"
-          max="3000"
+          max="8000"
           value={maxTokens}
           onChange={(e) => saveMaxTokens(Number(e.target.value))}
         ></input>
