@@ -1,7 +1,7 @@
 import { useChatGPT } from '../hooks/useChatGPT'
 
 const Header = () => {
-  const models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301']
+  const models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301', 'gpt-4']
   const {
     apikey,
     model,
@@ -21,12 +21,14 @@ const Header = () => {
   const main = () => {
     return (
       <div className="h-full flex items-center gap-1 bg-gray-800">
-        <ApiKey />
-        <Model />
-        <Temperature />
-        <MaxTokens />
-        <ChatMode />
-        <SendButton />
+        <div className="hidden sm:inline-block">
+          <ApiKey />
+          <Model />
+          <Temperature />
+          <MaxTokens />
+          <ChatMode />
+          <SendButton />
+        </div>
       </div>
     )
   }

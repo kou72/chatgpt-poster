@@ -2,15 +2,14 @@ import { useChatGPT } from '../hooks/useChatGPT'
 
 const Sidebar = () => {
   const {
-    totalTokens,
+    totalUsedYen,
     history,
     setInput,
     setOutput,
     setSystem,
     setChats,
-    resetTotalTokens,
+    resetTotalUsedYen,
   } = useChatGPT()
-  const usedYen = totalTokens * (0.002 / 1000) * 150
 
   const handleClick = (index: number) => {
     setInput(history[index].input)
@@ -20,20 +19,38 @@ const Sidebar = () => {
     console.log(history[index].input, history[index].output)
   }
 
-  return (
-    <div className="bg-gray-600 h-full text-center">
+  const main = () => {
+    return (
+      <div className="hidden sm:inline-block">
+        <div className="bg-gray-600 h-full text-center">
+          <TotalYenUsed />
+          <HistoryList />
+        </div>
+      </div>
+    )
+  }
+
+  const TotalYenUsed = () => {
+    return (
       <div className="p-4">
         <div className="border border-white rounded-md p-4">
           <p className="m-2 text-white">使った金額</p>
-          <p className="m-2 text-white text-xl">{usedYen.toFixed(3) ?? 0} 円</p>
+          <p className="m-2 text-white text-xl">
+            {totalUsedYen.toFixed(3) ?? 0} 円
+          </p>
           <button
             className="m-2 px-4 py-1 text-white bg-gray-500 rounded-md"
-            onClick={resetTotalTokens}
+            onClick={resetTotalUsedYen}
           >
             Reset
           </button>
         </div>
       </div>
+    )
+  }
+
+  const HistoryList = () => {
+    return (
       <div className="overflow-y-auto">
         <ul className="list-none w-full flex flex-col-reverse">
           {history.map((item, index) => (
@@ -47,8 +64,10 @@ const Sidebar = () => {
           ))}
         </ul>
       </div>
-    </div>
-  )
+    )
+  }
+
+  return main()
 }
 
 export default Sidebar
