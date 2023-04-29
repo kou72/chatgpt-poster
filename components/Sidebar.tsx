@@ -21,11 +21,9 @@ const Sidebar = () => {
 
   const main = () => {
     return (
-      <div className="hidden sm:inline-block">
-        <div className="bg-gray-600 h-full text-center">
-          <TotalYenUsed />
-          <HistoryList />
-        </div>
+      <div className="bg-gray-600 h-full text-center">
+        <TotalYenUsed />
+        <HistoryList />
       </div>
     )
   }
