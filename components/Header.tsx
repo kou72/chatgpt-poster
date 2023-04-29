@@ -21,11 +21,13 @@ const Header = () => {
   const main = () => {
     return (
       <div className="h-full flex items-center gap-1 bg-gray-800">
-        <ApiKey />
-        <Model />
-        <Temperature />
-        <MaxTokens />
-        <ChatMode />
+        <div className="w-full hidden sm:flex">
+          <ApiKey />
+          <Model />
+          <Temperature />
+          <MaxTokens />
+          <ChatMode />
+        </div>
         <SendButton />
       </div>
     )

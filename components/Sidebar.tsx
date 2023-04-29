@@ -16,14 +16,16 @@ const Sidebar = () => {
     setOutput(history[index].output)
     setSystem(history[index].system)
     setChats(history[index].chats)
-    console.log(history[index].input, history[index].output)
+    console.log(history[index].output)
   }
 
   const main = () => {
     return (
-      <div className="bg-gray-600 h-full text-center">
-        <TotalYenUsed />
-        <HistoryList />
+      <div className="hidden sm:inline-block">
+        <div className="bg-gray-600 h-full text-center">
+          <TotalYenUsed />
+          <HistoryList />
+        </div>
       </div>
     )
   }
