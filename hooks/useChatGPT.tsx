@@ -134,9 +134,17 @@ export const useChatGPT = () => {
   }
 
   const calcUsedYen = (promptTokens: number, completionTokens: number) => {
-    const promptPricing = model === 'gpt-4' ? 0.03 / 1000 : 0.002 / 1000
-    const completionPricing = 'gpt-4' ? 0.06 / 1000 : 0.002 / 1000
+    let promptPricing = 0.002 / 1000
+    let completionPricing = 0.002 / 1000
     const dollarToYenRate = 150
+
+    if (model === 'gpt-4') {
+      promptPricing = 0.03 / 1000
+      completionPricing = 0.06 / 1000
+    } else if (model === 'gpt-3.5-turbo' || model === 'gpt-3.5') {
+      promptPricing = 0.002 / 1000
+      completionPricing = 0.002 / 1000
+    }
 
     const promptYen = promptTokens * promptPricing * dollarToYenRate
     const completionYen = completionTokens * completionPricing * dollarToYenRate
