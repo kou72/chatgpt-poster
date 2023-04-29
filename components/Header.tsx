@@ -36,6 +36,7 @@ const Header = () => {
       <>
         <span className="mx-1 text-white">API Key</span>
         <input
+          type="password"
           className="w-1/8 pl-1"
           value={apikey}
           onChange={(e) => saveApikey(e.target.value)}
