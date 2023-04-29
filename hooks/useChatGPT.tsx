@@ -76,6 +76,7 @@ export const useChatGPT = () => {
       setMaxTokens(getLocalStrage('maxTokens', 200))
       setMaxTokenCheck(getLocalStrage('totalTokenCheck', true))
       setChatMode(getLocalStrage('chatMode', false))
+      setTotalUsedYen(getLocalStrage('totalUsedYen', 0))
       setHistory(getLocalStrage('history', initHistory))
       setSystem(getLocalStrage('system', ''))
     } catch (error) {
