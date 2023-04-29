@@ -141,7 +141,7 @@ export const useChatGPT = () => {
     if (model === 'gpt-4') {
       promptPricing = 0.03 / 1000
       completionPricing = 0.06 / 1000
-    } else if (model === 'gpt-3.5-turbo' || model === 'gpt-3.5') {
+    } else if (model === 'gpt-3.5-turbo' || model === 'gpt-3.5-turbo-0301') {
       promptPricing = 0.002 / 1000
       completionPricing = 0.002 / 1000
     }
