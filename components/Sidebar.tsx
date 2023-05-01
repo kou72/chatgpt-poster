@@ -16,7 +16,7 @@ const Sidebar = () => {
     setOutput(history[index].output)
     setSystem(history[index].system)
     setChats(history[index].chats)
-    console.log(history[index].input, history[index].output)
+    console.log(history[index].output)
   }
 
   const main = () => {
