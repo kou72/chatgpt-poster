@@ -53,15 +53,20 @@ const Sidebar = () => {
     return (
       <div className="overflow-y-auto">
         <ul className="list-none w-full flex flex-col-reverse">
-          {history.map((item, index) => (
-            <li
-              key={index}
-              className="py-2 px-4 m-2 max-h-32 overflow-hidden text-white text-xs text-left border border-white cursor-pointer rounded"
-              onClick={() => handleClick(index)}
-            >
-              {item.input}
-            </li>
-          ))}
+          {history.map((item, index) => {
+            const maxlength = 200
+            const leader = item.input.length > maxlength ? '...' : ''
+            return (
+              <li
+                key={index}
+                className="py-2 px-4 m-2 max-h-32 overflow-hidden text-white text-xs text-left border border-white cursor-pointer rounded"
+                onClick={() => handleClick(index)}
+              >
+                {item.input.slice(0, maxlength)}
+                {leader}
+              </li>
+            )
+          })}
         </ul>
       </div>
     )
