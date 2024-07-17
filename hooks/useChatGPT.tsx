@@ -139,7 +139,7 @@ export const useChatGPT = () => {
     let completionPricing = 0.002 / 1000
     const dollarToYenRate = 150
 
-    if (model === 'gpt-4') {
+    if (model === 'gpt-4' || model === 'gpt-4o') {
       promptPricing = 0.03 / 1000
       completionPricing = 0.06 / 1000
     } else if (model === 'gpt-3.5-turbo' || model === 'gpt-3.5-turbo-0301') {
